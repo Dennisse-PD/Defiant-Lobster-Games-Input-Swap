@@ -6,6 +6,7 @@ using Cinemachine;
 
 namespace Game.Scripts.Player
 {
+    //This script will hold the movement logic that will be executed in our Player Manager as the input registers
     [RequireComponent(typeof(CharacterController))]
     public class Player : MonoBehaviour
     {
@@ -16,7 +17,7 @@ namespace Game.Scripts.Player
         private bool _playerGrounded;
         [SerializeField]
         private Detonator _detonator;
-        private bool _canMove = true;
+        private bool _canMove = true; //MOVEMENT
         [SerializeField]
         private CinemachineVirtualCamera _followCam;
         [SerializeField]
@@ -48,14 +49,15 @@ namespace Game.Scripts.Player
                 Debug.Log("Failed to connect the Animator");
         }
 
-        private void Update()
+        private void Update() //MOVEMENT
         {
-            if (_canMove == true)
-                CalcutateMovement();
+           // if (_canMove == true)
+              //  CalcutateMovement();
 
         }
 
-        private void CalcutateMovement()
+      //  private void CalcutateMovement() This should be made public so we can access it in the PlayerManager
+         public void CalcutateMovement(Vector2 move)
         {
             _playerGrounded = _controller.isGrounded;
             float h = Input.GetAxisRaw("Horizontal");
@@ -94,13 +96,13 @@ namespace Game.Scripts.Player
             }
         }
 
-        private void ReleasePlayerControl()
+        private void ReleasePlayerControl()// MOVEMENT
         {
             _canMove = false;
             _followCam.Priority = 9;
         }
 
-        private void ReturnPlayerControl()
+        private void ReturnPlayerControl() //MOVEMENT
         {
             _model.SetActive(true);
             _canMove = true;

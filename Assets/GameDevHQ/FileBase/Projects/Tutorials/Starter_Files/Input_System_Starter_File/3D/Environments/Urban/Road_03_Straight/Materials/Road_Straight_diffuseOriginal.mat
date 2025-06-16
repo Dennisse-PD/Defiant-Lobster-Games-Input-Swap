@@ -21,14 +21,14 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Road_Straight_diffuseOriginal
-  m_Shader: {fileID: 10765, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords:
+  m_ValidKeywords:
   - _METALLICGLOSSMAP
-  - _METALLICSPECGLOSSMAP
   - _NORMALMAP
+  m_InvalidKeywords:
+  - _METALLICSPECGLOSSMAP
   - _OCCLUSIONMAP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -62,16 +62,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Scale: {x: 1.73, y: 1}
+        m_Offset: {x: 0, y: -0.53}
     - _MainBump:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: ca4f89bee38564c25b769d81861326b7, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: -1}
+        m_Scale: {x: 1.73, y: 1}
+        m_Offset: {x: 0, y: -0.53}
     - _MetallicGlossMap:
         m_Texture: {fileID: 2800000, guid: fc6e3b081105141588b5305da711bcd3, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -123,7 +123,7 @@ Material:
     - _Parallax: 0.02
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Shininess: 1
+    - _Shininess: 0.01
     - _Smoothness: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
