@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Game.Scripts.LiveObjects;
 using Cinemachine;
+using System.Runtime.InteropServices;
 
 namespace Game.Scripts.Player
 {
@@ -59,28 +60,31 @@ namespace Game.Scripts.Player
       //  private void CalcutateMovement() This should be made public so we can access it in the PlayerManager
          public void CalcutateMovement(Vector2 move)
         {
-            _playerGrounded = _controller.isGrounded;
-            float h = Input.GetAxisRaw("Horizontal");
-            float v = Input.GetAxisRaw("Vertical");
-
-            transform.Rotate(transform.up, h);
-
-            var direction = transform.forward * v;
-            var velocity = direction * _speed;
-
-
-            _anim.SetFloat("Speed", Mathf.Abs(velocity.magnitude));
-
-
-            if (_playerGrounded)
-                velocity.y = 0f;
-            if (!_playerGrounded)
+            if (_canMove == true) //Moved here so we can still validate movement without having to overhaul unnecessarily  
             {
-                velocity.y += -20f * Time.deltaTime;
-            }
-            
-            _controller.Move(velocity * Time.deltaTime);                      
+                _playerGrounded = _controller.isGrounded;
+                float h = Input.GetAxisRaw("Horizontal");
+                float v = Input.GetAxisRaw("Vertical");
 
+                transform.Rotate(transform.up, h * 5f);
+
+                var direction = transform.forward * v;
+                var velocity = direction * _speed;
+
+
+                _anim.SetFloat("Speed", Mathf.Abs(velocity.magnitude));
+
+
+                if (_playerGrounded)
+                    velocity.y = 0f;
+                if (!_playerGrounded)
+                {
+                    velocity.y += -20f * Time.deltaTime;
+                }
+
+                _controller.Move(velocity * Time.deltaTime);
+            }
+                                   
         }
 
         private void InteractableZone_onZoneInteractionComplete(InteractableZone zone)
@@ -93,6 +97,8 @@ namespace Game.Scripts.Player
                 case 2: //Trigger Explosion
                     TriggerExplosive();
                     break;
+             //is there not drone zone case? Could this be the issue??
+                    
             }
         }
 
@@ -111,7 +117,7 @@ namespace Game.Scripts.Player
 
         private void HidePlayer()
         {
-            _model.SetActive(false);
+            _model.SetActive(false); // hides the player when they enter the drone zone to switch controls
         }
                
         private void TriggerExplosive()

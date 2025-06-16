@@ -35,7 +35,7 @@ namespace Game.Scripts.LiveObjects
             InteractableZone.onZoneInteractionComplete += EnterFlightMode;
         }
 
-        private void EnterFlightMode(InteractableZone zone)
+        private void EnterFlightMode(InteractableZone zone)//WILL NEED THIS TO SWAP ACTION WITHIN INTERACTABLE ZONE
         {
             if (_inFlightMode != true && zone.GetZoneID() == 4) // drone Scene
             {
@@ -48,21 +48,22 @@ namespace Game.Scripts.LiveObjects
             }
         }
 
-        private void ExitFlightMode()
+        private void ExitFlightMode()//NEED TO USE THIS FOR THE EXIT INPUT SWAP(should be a public method)
         {            
             _droneCam.Priority = 9;
             _inFlightMode = false;
             UIManager.Instance.DroneView(false);            
         }
 
-        private void Update()
+        private void Update()//MOVEMENT
         {
-            if (_inFlightMode)
+            if (_inFlightMode)//might need to move this to a method
             {
+                //I can call these two methods from the Player Manager or should I have a drone manager script?
                 CalculateTilt();
                 CalculateMovementUpdate();
 
-                if (Input.GetKeyDown(KeyCode.Escape))
+                if (Input.GetKeyDown(KeyCode.Escape))//EXIT KEY. MUST SWAP
                 {
                     _inFlightMode = false;
                     onExitFlightmode?.Invoke();
@@ -71,14 +72,14 @@ namespace Game.Scripts.LiveObjects
             }
         }
 
-        private void FixedUpdate()
+        private void FixedUpdate() ////FIXED MOVEMENT
         {
             _rigidbody.AddForce(transform.up * (9.81f), ForceMode.Acceleration);
             if (_inFlightMode)
                 CalculateMovementFixedUpdate();
         }
 
-        private void CalculateMovementUpdate()
+        private void CalculateMovementUpdate() //MOVEMENT METHOD (LEFT AND RIGHT)
         {
             if (Input.GetKey(KeyCode.LeftArrow))
             {
@@ -94,7 +95,7 @@ namespace Game.Scripts.LiveObjects
             }
         }
 
-        private void CalculateMovementFixedUpdate()
+        private void CalculateMovementFixedUpdate() //FIXED MOVEMENT METHOD (physics/UP AND DOWN) 
         {
             
             if (Input.GetKey(KeyCode.Space))
@@ -107,7 +108,7 @@ namespace Game.Scripts.LiveObjects
             }
         }
 
-        private void CalculateTilt()
+        private void CalculateTilt() //TILT MOVEMENT (Create action map and swap this)
         {
             if (Input.GetKey(KeyCode.A)) 
                 transform.rotation = Quaternion.Euler(00, transform.localRotation.eulerAngles.y, 30);

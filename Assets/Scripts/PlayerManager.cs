@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//This script can alternatively be an Input Manager rather than the Player manager but will keep things as they are for now
 public class PlayerManager : MonoBehaviour
 {
     [SerializeField]
@@ -13,7 +14,7 @@ public class PlayerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InitializeInput();
+        InitializePlayerInput();
     }
 
     // Update is called once per frame
@@ -23,12 +24,19 @@ public class PlayerManager : MonoBehaviour
         var move = _input.Player.Move.ReadValue<Vector2>();
         _player.CalcutateMovement(move); //uses the parameter variable which is of type vector 2
     }
-    private void InitializeInput()
+    private void InitializePlayerInput()
     {
         _input = new PlayerInputActions();
         _input.Player.Enable();
         //generate peform callback here
         
+    }
+    //create method to initialize drone input
+    private void InitializeDroneInput()
+    {
+        //this method will be called when the ENTER DRONE key is pressed withint he interactable zone
+        _input.Player.Disable(); //This will be re-enabled when the key to exit the drone is pressed 
+        _input.Drone.Enable();
     }
 
    

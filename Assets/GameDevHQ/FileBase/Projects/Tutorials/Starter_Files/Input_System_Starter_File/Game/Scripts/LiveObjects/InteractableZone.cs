@@ -76,6 +76,7 @@ namespace Game.Scripts.LiveObjects
         {
             if (other.CompareTag("Player") && _currentZoneID > _requiredID)
             {
+              //This zone is for the C4 Intercatable             
                 switch (_zoneType)
                 {
                     case ZoneType.Collectable:
@@ -93,11 +94,15 @@ namespace Game.Scripts.LiveObjects
                         break;
 
                     case ZoneType.Action:
+                        Debug.Log("You are in the action zone!");
                         if (_actionPerformed == false)
                         {
+                           
                             _inZone = true;
+                            
                             if (_displayMessage != null)
                             {
+                                Debug.Log("DISPLAY IS NOT NULL");
                                 string message = $"Press the {_zoneKeyInput.ToString()} key to {_displayMessage}.";
                                 UIManager.Instance.DisplayInteractableZoneMessage(true, message);
                             }
