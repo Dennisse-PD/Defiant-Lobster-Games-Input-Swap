@@ -74,6 +74,7 @@ namespace Game.Scripts.LiveObjects
 
         private void OnTriggerEnter(Collider other)
         {
+            
             if (other.CompareTag("Player") && _currentZoneID > _requiredID)
             {
               //This zone is for the C4 Intercatable             
@@ -92,12 +93,13 @@ namespace Game.Scripts.LiveObjects
                                 UIManager.Instance.DisplayInteractableZoneMessage(true, $"Press the {_zoneKeyInput.ToString()} key to collect");
                         }
                         break;
-
+                     //Drone interctable 
                     case ZoneType.Action:
-                        Debug.Log("You are in the action zone!");
+                   
                         if (_actionPerformed == false)
                         {
                            
+
                             _inZone = true;
                             
                             if (_displayMessage != null)
@@ -249,8 +251,10 @@ namespace Game.Scripts.LiveObjects
         {
             if (other.CompareTag("Player"))
             {
-                _inZone = false;
-                UIManager.Instance.DisplayInteractableZoneMessage(false);
+                //here we should show the UI message instead of the case
+                _inZone = true; //this was set to false making the drone unusable 
+                UIManager.Instance.DisplayInteractableZoneMessage(true);//let's
+               
             }
         }
 

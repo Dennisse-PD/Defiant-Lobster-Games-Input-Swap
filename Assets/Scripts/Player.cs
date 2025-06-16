@@ -35,6 +35,8 @@ namespace Game.Scripts.Player
             Forklift.onDriveModeEntered += HidePlayer;
             Drone.OnEnterFlightMode += ReleasePlayerControl;
             Drone.onExitFlightmode += ReturnPlayerControl;
+            Drone.OnEnterFlightMode += HidePlayer;//This was missing for the flight so the character was not hiding, might remove
+            Drone.onExitFlightmode -= HidePlayer ;
         } 
 
         private void Start()
@@ -66,7 +68,7 @@ namespace Game.Scripts.Player
                 float h = Input.GetAxisRaw("Horizontal");
                 float v = Input.GetAxisRaw("Vertical");
 
-                transform.Rotate(transform.up, h * 5f);
+                transform.Rotate(transform.up, h);//If you want the character to rotate faster, you can add a multiplier
 
                 var direction = transform.forward * v;
                 var velocity = direction * _speed;

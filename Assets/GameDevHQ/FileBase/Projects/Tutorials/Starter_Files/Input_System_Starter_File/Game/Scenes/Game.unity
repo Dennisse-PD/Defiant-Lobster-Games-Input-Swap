@@ -12329,7 +12329,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 4.5905e-41, y: 0.0009527989, z: 4.5905e-41, w: 9.403955e-38}
+  m_BoundingSphereOverride: {x: 1.02e-43, y: 0, z: 1.4616e-41, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -13220,7 +13220,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &766233568
 Transform:
   m_ObjectHideFlags: 0
@@ -24896,7 +24896,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5779097134961922744, guid: 1d553f90302742946bbf45996165949c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.478
+      value: 7.6
       objectReference: {fileID: 0}
     - target: {fileID: 5779097134961922744, guid: 1d553f90302742946bbf45996165949c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -24904,7 +24904,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5779097134961922744, guid: 1d553f90302742946bbf45996165949c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.9
+      value: 8.261
       objectReference: {fileID: 0}
     - target: {fileID: 5779097134961922744, guid: 1d553f90302742946bbf45996165949c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -28404,6 +28404,10 @@ PrefabInstance:
     - target: {fileID: 5098578218743658244, guid: 1d553f90302742946bbf45996165949c, type: 3}
       propertyPath: m_Center.z
       value: -0.35936832
+      objectReference: {fileID: 0}
+    - target: {fileID: 5098578218743658244, guid: 1d553f90302742946bbf45996165949c, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5779097134961922744, guid: 1d553f90302742946bbf45996165949c, type: 3}
       propertyPath: m_RootOrder
@@ -34301,7 +34305,7 @@ MonoBehaviour:
   _zoneType: 1
   _zoneID: 4
   _requiredID: 3
-  _displayMessage: Fly Drone
+  _displayMessage: fly drone
   _zoneItems: []
   _inventoryIcon: {fileID: 0}
   _zoneKeyInput: 101
@@ -38568,9 +38572,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2071373263}
   - component: {fileID: 2071373264}
+  - component: {fileID: 2071373265}
   m_Layer: 0
   m_Name: PlayerManager
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -38604,6 +38609,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 359860633}
+--- !u!136 &2071373265
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071373262}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.63300914
+  m_Height: 1.266019
+  m_Direction: 1
+  m_Center: {x: -0.000000001108666, y: 0, z: 0.13300833}
 --- !u!1 &2073378738 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 96fbf3c4178a64347a5a4473b3a44fb2, type: 3}
