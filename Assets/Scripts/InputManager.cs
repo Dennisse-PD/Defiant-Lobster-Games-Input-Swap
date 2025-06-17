@@ -32,14 +32,19 @@ public class InputManager : MonoBehaviour
         var move = _input.Player.Move.ReadValue<Vector2>(); //Using the context value from our vector2 input, we can register direction
         _player.CalcutateMovement(move); //uses the parameter variable which is of type vector 2
 
-        //Drone Movement
+        //Drone Tilt
         var tilt = _input.Drone.Tilt.ReadValue<Vector2>();
         Debug.Log("Vector Value: " + tilt);
        _drone.CalculateTilt(tilt);
+
+      
     }
     private void FixedUpdate()
     {
-        //fixed logic here for drone
+        //Drone Up and Down
+        var direction = _input.Drone.Vertical.ReadValue<float>();
+        if (direction != 0) // 1D Axis gives us a value of 1 or -1 depending on cardinal direction so this is always true if there is input
+            _drone.CalculateMovementFixedUpdate(-direction); //-direction to invert direction
     }
     private void InitializePlayerInput()
     {

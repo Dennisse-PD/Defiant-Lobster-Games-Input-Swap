@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using Game.Scripts.UI;
+using UnityEditor.Experimental.GraphView;
 
 namespace Game.Scripts.LiveObjects
 {
@@ -91,9 +92,10 @@ namespace Game.Scripts.LiveObjects
         }
         private void FixedUpdate() ////FIXED UPDATE METHOD
         {
-            _rigidbody.AddForce(transform.up * (9.81f), ForceMode.Acceleration); //Seems to be adding gravity 9.81 as an upward force to keep airborne(?)
-            if (_inFlightMode)
-                CalculateMovementFixedUpdate();
+            //rigidbody --> moved to calculate method
+           _rigidbody.AddForce(transform.up * (9.81f), ForceMode.Acceleration); //Seems to be adding gravity 9.81 as an upward force to keep airborne(?)
+         //   if (_inFlightMode)
+                //CalculateMovementFixedUpdate(di);
         }
 
         private void CalculateMovementUpdate() //MOVEMENT METHOD (LEFT AND RIGHT) ARROW KEYS(Should be public)
@@ -112,17 +114,17 @@ namespace Game.Scripts.LiveObjects
             }
         }
 
-        private void CalculateMovementFixedUpdate() //FIXED MOVEMENT METHOD (physics/UP AND DOWN)  SPACE AND V(Should be public)
+        public void CalculateMovementFixedUpdate(float direction) //FIXED MOVEMENT METHOD (physics/UP AND DOWN)  SPACE AND V(Should be public)
         {
-            
-            if (Input.GetKey(KeyCode.Space))
+            _rigidbody.AddForce(transform.up * direction * _speed, ForceMode.Acceleration);
+            /*    if (Input.GetKey(KeyCode.Space))
             {
-                _rigidbody.AddForce(transform.up * _speed, ForceMode.Acceleration);
+           _rigidbody.AddForce(transform.up * direction * _speed, ForceMode.Acceleration);
             }
             if (Input.GetKey(KeyCode.V))
             {
-                _rigidbody.AddForce(-transform.up * _speed, ForceMode.Acceleration);
-            }
+            //    _rigidbody.AddForce(-transform.up * direction * _speed, ForceMode.Acceleration);
+           */
         }
         public void CalculateTilt(Vector2 tilt) 
         //this method has been reworked in a way that only the movement logic is implement without having to rely on legacy input
@@ -150,13 +152,13 @@ namespace Game.Scripts.LiveObjects
 
         /* if (Input.GetKey(KeyCode.A)) //we can use the value in the PlayerManager to handle this
              transform.rotation = Quaternion.Euler(00,transform.localRotation.eulerAngles.y, 30);
-      //   else if (Input.GetKey(KeyCode.D))
+           else if (Input.GetKey(KeyCode.D))
              transform.rotation = Quaternion.Euler(0, transform.localRotation.eulerAngles.y, -30);
-        // else if (Input.GetKey(KeyCode.W))
+          else if (Input.GetKey(KeyCode.W))
              transform.rotation = Quaternion.Euler(30, transform.localRotation.eulerAngles.y, 0);
-        // else if (Input.GetKey(KeyCode.S))
+          else if (Input.GetKey(KeyCode.S))
              transform.rotation = Quaternion.Euler(-30, transform.localRotation.eulerAngles.y, 0);
-        // else 
+          else 
              transform.rotation = Quaternion.Euler(0, transform.localRotation.eulerAngles.y, 0);
         */
         // }
