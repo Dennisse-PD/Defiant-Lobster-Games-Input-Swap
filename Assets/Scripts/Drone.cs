@@ -57,10 +57,10 @@ namespace Game.Scripts.LiveObjects
 
         private void Update()//MOVEMENT
         {
-            if (_inFlightMode)//might need to move this to a method
+            if (_inFlightMode)//NEED to figure out where to place this validation
             {
                 //I can call these two methods from the Player Manager or should I have a drone manager script?
-                CalculateTilt();
+               // CalculateTilt(); --> No longer needed here
                 CalculateMovementUpdate();
 
                 if (Input.GetKeyDown(KeyCode.Escape))//EXIT KEY. MUST SWAP
@@ -72,14 +72,14 @@ namespace Game.Scripts.LiveObjects
             }
         }
 
-        private void FixedUpdate() ////FIXED MOVEMENT
+        private void FixedUpdate() ////FIXED UPDATE METHOD
         {
-            _rigidbody.AddForce(transform.up * (9.81f), ForceMode.Acceleration);
+            _rigidbody.AddForce(transform.up * (9.81f), ForceMode.Acceleration); //Seems to be adding gravity 9.81 as an upward force to keep airborne(?)
             if (_inFlightMode)
                 CalculateMovementFixedUpdate();
         }
 
-        private void CalculateMovementUpdate() //MOVEMENT METHOD (LEFT AND RIGHT)
+        private void CalculateMovementUpdate() //MOVEMENT METHOD (LEFT AND RIGHT) ARROW KEYS(Should be public)
         {
             if (Input.GetKey(KeyCode.LeftArrow))
             {
@@ -95,7 +95,7 @@ namespace Game.Scripts.LiveObjects
             }
         }
 
-        private void CalculateMovementFixedUpdate() //FIXED MOVEMENT METHOD (physics/UP AND DOWN) 
+        private void CalculateMovementFixedUpdate() //FIXED MOVEMENT METHOD (physics/UP AND DOWN)  SPACE AND V(Should be public)
         {
             
             if (Input.GetKey(KeyCode.Space))
@@ -108,9 +108,10 @@ namespace Game.Scripts.LiveObjects
             }
         }
 
-        private void CalculateTilt() //TILT MOVEMENT (Create action map and swap this)
+        //private void CalculateTilt() //Should be made public and given a vector 2 parameter
+        public void CalculateTilt(Vector2 tilt) //TILT MOVEMENT WASD (should be public)
         {
-            if (Input.GetKey(KeyCode.A)) 
+            if (Input.GetKey(KeyCode.A)) //we can use the value in the PlayerManager to handle this
                 transform.rotation = Quaternion.Euler(00, transform.localRotation.eulerAngles.y, 30);
             else if (Input.GetKey(KeyCode.D))
                 transform.rotation = Quaternion.Euler(0, transform.localRotation.eulerAngles.y, -30);

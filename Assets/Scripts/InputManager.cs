@@ -1,14 +1,21 @@
+using Game.Scripts.LiveObjects;
 using Game.Scripts.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//This script can alternatively be an Input Manager rather than the Player manager but will keep things as they are for now
-public class PlayerManager : MonoBehaviour
+public class InputManager : MonoBehaviour
 {
+    //Player
     [SerializeField]
-    private Player _player; //Reference to the player object
-    private PlayerInputActions _input; //Reference to input actions generated class
+    private Player _player; 
+
+    //Input Actions
+    private PlayerInputActions _input;
+
+    //Drone 
+    [SerializeField]
+    private Drone _drone; //reference to drone object
 
     //This script handles the input. i.e Performed actions and such.
     // Start is called before the first frame update
@@ -20,9 +27,17 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Using the context value from our vector2 input, we can register direction
-        var move = _input.Player.Move.ReadValue<Vector2>();
+        //Player Movement
+        var move = _input.Player.Move.ReadValue<Vector2>(); //Using the context value from our vector2 input, we can register direction
         _player.CalcutateMovement(move); //uses the parameter variable which is of type vector 2
+
+        //Drone Tilt
+        var tilt = _input.Drone.Tilt.ReadValue<Vector2>();
+        _drone.CalculateTilt(tilt);
+    }
+    private void FixedUpdate()
+    {
+        //fixed logic here for drone
     }
     private void InitializePlayerInput()
     {

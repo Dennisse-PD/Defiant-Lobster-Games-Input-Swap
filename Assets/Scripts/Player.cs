@@ -54,13 +54,13 @@ namespace Game.Scripts.Player
 
         private void Update() //MOVEMENT
         {
-           // if (_canMove == true)
+           // if (_canMove == true) --> This is moved to the CalculateMovement Method
               //  CalcutateMovement();
 
         }
 
-      //  private void CalcutateMovement() This should be made public so we can access it in the PlayerManager
-         public void CalcutateMovement(Vector2 move)
+      //  private void CalcutateMovement() --> This should be made public so we can access it in the PlayerManager
+         public void CalcutateMovement(Vector2 move) //Pareamter added so we can manipulate the move variable in the PlayerIinput
         {
             if (_canMove == true) //Moved here so we can still validate movement without having to overhaul unnecessarily  
             {

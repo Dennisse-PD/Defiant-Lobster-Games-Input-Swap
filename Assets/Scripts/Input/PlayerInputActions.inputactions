@@ -78,7 +78,7 @@
             "id": "b62fd153-44ea-4f3f-a455-10871bdf8acd",
             "actions": [
                 {
-                    "name": "Move",
+                    "name": "Tilt",
                     "type": "Value",
                     "id": "34246c3f-6d8b-4906-b294-22e61dccc2b1",
                     "expectedControlType": "Vector2",
@@ -98,13 +98,13 @@
             ],
             "bindings": [
                 {
-                    "name": "Move",
+                    "name": "Vector 2",
                     "id": "445567e6-6a92-40ba-9076-cb5b11c34cde",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "Tilt",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -115,7 +115,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "Tilt",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -126,7 +126,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "Tilt",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -137,7 +137,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "Tilt",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -148,7 +148,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "Tilt",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
