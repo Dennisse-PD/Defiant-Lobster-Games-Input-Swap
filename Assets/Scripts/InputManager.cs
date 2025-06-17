@@ -3,6 +3,7 @@ using Game.Scripts.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
@@ -31,9 +32,10 @@ public class InputManager : MonoBehaviour
         var move = _input.Player.Move.ReadValue<Vector2>(); //Using the context value from our vector2 input, we can register direction
         _player.CalcutateMovement(move); //uses the parameter variable which is of type vector 2
 
-        //Drone Tilt
+        //Drone Movement
         var tilt = _input.Drone.Tilt.ReadValue<Vector2>();
-        _drone.CalculateTilt(tilt);
+        Debug.Log("Vector Value: " + tilt);
+       _drone.CalculateTilt(tilt);
     }
     private void FixedUpdate()
     {
@@ -46,13 +48,19 @@ public class InputManager : MonoBehaviour
         //generate peform callback here
         
     }
-    //create method to initialize drone input
-    private void InitializeDroneInput()
+   
+    public void InitializeDroneInput()
     {
-        //this method will be called when the ENTER DRONE key is pressed withint he interactable zone
-        _input.Player.Disable(); //This will be re-enabled when the key to exit the drone is pressed 
+        //This method is called from within the Drone Script when flight is enabled
+        _input.Player.Disable(); //Player controls won't be accesssible during this
         _input.Drone.Enable();
     }
+    public void DisableDroneControls()
+    {
+        //This method is called from within the Drone Srcipt when flight is disabled
+        _input.Player.Enable();  //Return control to the Player
+        _input.Drone.Disable();
+    }
 
-   
+
 }

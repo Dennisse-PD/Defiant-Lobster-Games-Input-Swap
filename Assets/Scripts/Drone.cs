@@ -25,7 +25,14 @@ namespace Game.Scripts.LiveObjects
         private CinemachineVirtualCamera _droneCam;
         [SerializeField]
         private InteractableZone _interactableZone;
-        
+
+        //Input Manager 
+        [SerializeField]
+        private InputManager _inputManager;
+
+        //Drone Starting Position
+        Vector3 startPos;
+
 
         public static event Action OnEnterFlightMode;
         public static event Action onExitFlightmode;
@@ -45,6 +52,10 @@ namespace Game.Scripts.LiveObjects
                 OnEnterFlightMode?.Invoke();
                 UIManager.Instance.DroneView(true);
                 _interactableZone.CompleteTask(4);
+                //enable drone controls
+                _inputManager.InitializeDroneInput();
+                
+               
             }
         }
 
@@ -52,14 +63,16 @@ namespace Game.Scripts.LiveObjects
         {            
             _droneCam.Priority = 9;
             _inFlightMode = false;
-            UIManager.Instance.DroneView(false);            
+            UIManager.Instance.DroneView(false);
+            _inputManager.DisableDroneControls();   //disable drone controls
+            this.transform.position = startPos; //Return drone to start position
         }
 
         private void Update()//MOVEMENT
         {
             if (_inFlightMode)//NEED to figure out where to place this validation
             {
-                //I can call these two methods from the Player Manager or should I have a drone manager script?
+                //I can call these two methods from the Player Manager 
                // CalculateTilt(); --> No longer needed here
                 CalculateMovementUpdate();
 
@@ -72,6 +85,10 @@ namespace Game.Scripts.LiveObjects
             }
         }
 
+        private void Start()
+        {
+            startPos = this.transform.position;
+        }
         private void FixedUpdate() ////FIXED UPDATE METHOD
         {
             _rigidbody.AddForce(transform.up * (9.81f), ForceMode.Acceleration); //Seems to be adding gravity 9.81 as an upward force to keep airborne(?)
@@ -107,21 +124,42 @@ namespace Game.Scripts.LiveObjects
                 _rigidbody.AddForce(-transform.up * _speed, ForceMode.Acceleration);
             }
         }
-
-        //private void CalculateTilt() //Should be made public and given a vector 2 parameter
-        public void CalculateTilt(Vector2 tilt) //TILT MOVEMENT WASD (should be public)
+        public void CalculateTilt(Vector2 tilt) 
+        //this method has been reworked in a way that only the movement logic is implement without having to rely on legacy input
+            
         {
-            if (Input.GetKey(KeyCode.A)) //we can use the value in the PlayerManager to handle this
-                transform.rotation = Quaternion.Euler(00, transform.localRotation.eulerAngles.y, 30);
-            else if (Input.GetKey(KeyCode.D))
-                transform.rotation = Quaternion.Euler(0, transform.localRotation.eulerAngles.y, -30);
-            else if (Input.GetKey(KeyCode.W))
-                transform.rotation = Quaternion.Euler(30, transform.localRotation.eulerAngles.y, 0);
-            else if (Input.GetKey(KeyCode.S))
-                transform.rotation = Quaternion.Euler(-30, transform.localRotation.eulerAngles.y, 0);
-            else 
-                transform.rotation = Quaternion.Euler(0, transform.localRotation.eulerAngles.y, 0);
+            float xRotation = 0;
+            float zRotation = 0;
+
+            if (tilt.x < 0) // A
+                zRotation = 30;
+            else if (tilt.x > 0) // D
+                zRotation = -30;
+
+            if (tilt.y > 0) // W
+                xRotation = 30;
+            else if (tilt.y < 0) // S
+                xRotation = -30;
+
+            transform.rotation = Quaternion.Euler(xRotation, transform.localRotation.eulerAngles.y, zRotation);
         }
+
+        //private void CalculateTilt() //THIS METHOD HAS BEEN REWORKED ^
+       
+        // {
+
+        /* if (Input.GetKey(KeyCode.A)) //we can use the value in the PlayerManager to handle this
+             transform.rotation = Quaternion.Euler(00,transform.localRotation.eulerAngles.y, 30);
+      //   else if (Input.GetKey(KeyCode.D))
+             transform.rotation = Quaternion.Euler(0, transform.localRotation.eulerAngles.y, -30);
+        // else if (Input.GetKey(KeyCode.W))
+             transform.rotation = Quaternion.Euler(30, transform.localRotation.eulerAngles.y, 0);
+        // else if (Input.GetKey(KeyCode.S))
+             transform.rotation = Quaternion.Euler(-30, transform.localRotation.eulerAngles.y, 0);
+        // else 
+             transform.rotation = Quaternion.Euler(0, transform.localRotation.eulerAngles.y, 0);
+        */
+        // }
 
         private void OnDisable()
         {
