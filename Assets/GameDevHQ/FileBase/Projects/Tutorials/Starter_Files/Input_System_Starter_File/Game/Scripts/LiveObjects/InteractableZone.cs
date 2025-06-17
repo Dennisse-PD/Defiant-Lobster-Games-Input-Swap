@@ -75,14 +75,17 @@ namespace Game.Scripts.LiveObjects
         private void OnTriggerEnter(Collider other)
         {
             
-            if (other.CompareTag("Player") && _currentZoneID > _requiredID)
-            {
-              //This zone is for the C4 Intercatable             
+            Debug.Log($"OnTriggerEnter: player entered zone {_zoneID} | currentID: {_currentZoneID}, requiredID: {_requiredID}, zoneType: {_zoneType}");
+
+    if (other.CompareTag("Player") && _currentZoneID > _requiredID)
+    {
+        Debug.Log("Passed the zone requirement check");          
                 switch (_zoneType)
                 {
                     case ZoneType.Collectable:
                         if (_itemsCollected == false)
                         {
+                            Debug.Log("C4 Zonetype working!");
                             _inZone = true;
                             if (_displayMessage != null)
                             {
@@ -98,13 +101,12 @@ namespace Game.Scripts.LiveObjects
                    
                         if (_actionPerformed == false)
                         {
-                           
 
+                            Debug.Log("Action Zonetype working!");
                             _inZone = true;
                             
                             if (_displayMessage != null)
                             {
-                                Debug.Log("DISPLAY IS NOT NULL");
                                 string message = $"Press the {_zoneKeyInput.ToString()} key to {_displayMessage}.";
                                 UIManager.Instance.DisplayInteractableZoneMessage(true, message);
                             }
@@ -246,6 +248,7 @@ namespace Game.Scripts.LiveObjects
             else
                 _marker.SetActive(false);
         }
+        
 
         private void OnTriggerExit(Collider other)
         {
@@ -253,7 +256,7 @@ namespace Game.Scripts.LiveObjects
             {
                 //here we should show the UI message instead of the case
                 _inZone = true; //this was set to false making the drone unusable 
-                UIManager.Instance.DisplayInteractableZoneMessage(true);//let's
+                UIManager.Instance.DisplayInteractableZoneMessage(false);//let's
                
             }
         }

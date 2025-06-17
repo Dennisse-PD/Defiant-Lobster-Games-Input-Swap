@@ -68,7 +68,7 @@ namespace Game.Scripts.Player
                 float h = Input.GetAxisRaw("Horizontal");
                 float v = Input.GetAxisRaw("Vertical");
 
-                transform.Rotate(transform.up, h);//If you want the character to rotate faster, you can add a multiplier
+                transform.Rotate(transform.up, h * 3f);//If you want the character to rotate faster, you can add a multiplier
 
                 var direction = transform.forward * v;
                 var velocity = direction * _speed;
