@@ -125,6 +125,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rotate"",
+                    ""type"": ""Button"",
+                    ""id"": ""99907729-bd57-45ac-ad37-27c5c69620bd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -226,6 +235,39 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Vertical"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Rotation"",
+                    ""id"": ""5f6c8c79-9893-4dd5-9f03-87f1c21c7031"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""989cae54-3528-4ae7-9aa3-a0b6b086e2da"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""e82a70f5-2a45-4892-97ea-660d6a55b454"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -240,6 +282,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Drone_Tilt = m_Drone.FindAction("Tilt", throwIfNotFound: true);
         m_Drone_Thrust = m_Drone.FindAction("Thrust", throwIfNotFound: true);
         m_Drone_Vertical = m_Drone.FindAction("Vertical", throwIfNotFound: true);
+        m_Drone_Rotate = m_Drone.FindAction("Rotate", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -350,6 +393,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Drone_Tilt;
     private readonly InputAction m_Drone_Thrust;
     private readonly InputAction m_Drone_Vertical;
+    private readonly InputAction m_Drone_Rotate;
     public struct DroneActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -357,6 +401,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Tilt => m_Wrapper.m_Drone_Tilt;
         public InputAction @Thrust => m_Wrapper.m_Drone_Thrust;
         public InputAction @Vertical => m_Wrapper.m_Drone_Vertical;
+        public InputAction @Rotate => m_Wrapper.m_Drone_Rotate;
         public InputActionMap Get() { return m_Wrapper.m_Drone; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -375,6 +420,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Vertical.started += instance.OnVertical;
             @Vertical.performed += instance.OnVertical;
             @Vertical.canceled += instance.OnVertical;
+            @Rotate.started += instance.OnRotate;
+            @Rotate.performed += instance.OnRotate;
+            @Rotate.canceled += instance.OnRotate;
         }
 
         private void UnregisterCallbacks(IDroneActions instance)
@@ -388,6 +436,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Vertical.started -= instance.OnVertical;
             @Vertical.performed -= instance.OnVertical;
             @Vertical.canceled -= instance.OnVertical;
+            @Rotate.started -= instance.OnRotate;
+            @Rotate.performed -= instance.OnRotate;
+            @Rotate.canceled -= instance.OnRotate;
         }
 
         public void RemoveCallbacks(IDroneActions instance)
@@ -414,5 +465,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnTilt(InputAction.CallbackContext context);
         void OnThrust(InputAction.CallbackContext context);
         void OnVertical(InputAction.CallbackContext context);
+        void OnRotate(InputAction.CallbackContext context);
     }
 }

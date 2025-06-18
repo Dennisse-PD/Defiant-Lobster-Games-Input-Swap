@@ -37,7 +37,11 @@ public class InputManager : MonoBehaviour
         Debug.Log("Vector Value: " + tilt);
        _drone.CalculateTilt(tilt);
 
-      
+        //Drone Rotation
+        var rotInput = _input.Drone.Rotate.ReadValue<float>();
+        _drone.CalculateMovementUpdate(rotInput);
+
+
     }
     private void FixedUpdate()
     {

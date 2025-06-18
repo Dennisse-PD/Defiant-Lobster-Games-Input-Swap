@@ -5,6 +5,7 @@ using UnityEngine;
 using Cinemachine;
 using Game.Scripts.UI;
 using UnityEditor.Experimental.GraphView;
+using System.CodeDom.Compiler;
 
 namespace Game.Scripts.LiveObjects
 {
@@ -60,24 +61,24 @@ namespace Game.Scripts.LiveObjects
             }
         }
 
-        private void ExitFlightMode()//NEED TO USE THIS FOR THE EXIT INPUT SWAP(should be a public method)
+        private void ExitFlightMode()//NEED THIS FOR ESC KEY SWAP. Might need to make this public and call it on disable
         {            
             _droneCam.Priority = 9;
             _inFlightMode = false;
             UIManager.Instance.DroneView(false);
-            _inputManager.DisableDroneControls();   //disable drone controls
+            _inputManager.DisableDroneControls();//disable drone controls
             this.transform.position = startPos; //Return drone to start position
         }
 
-        private void Update()//MOVEMENT
+        private void Update()
         {
-            if (_inFlightMode)//NEED to figure out where to place this validation
+            //if (_inFlightMode) -->  No longer needed since we validate flight mode when enabling drone controls
             {
                 //I can call these two methods from the Player Manager 
-               // CalculateTilt(); --> No longer needed here
-                CalculateMovementUpdate();
+               // CalculateTilt(); --> Moved to InputManager Script
+              //  CalculateMovementUpdate();  --> Moved to InputManager Script
 
-                if (Input.GetKeyDown(KeyCode.Escape))//EXIT KEY. MUST SWAP
+                if (Input.GetKeyDown(KeyCode.Escape))//ESC CHANGE TO NEW INPUT. Could move all this to the disable?
                 {
                     _inFlightMode = false;
                     onExitFlightmode?.Invoke();
@@ -90,21 +91,27 @@ namespace Game.Scripts.LiveObjects
         {
             startPos = this.transform.position;
         }
-        private void FixedUpdate() ////FIXED UPDATE METHOD
+        private void FixedUpdate() 
         {
             //rigidbody --> moved to calculate method
-           _rigidbody.AddForce(transform.up * (9.81f), ForceMode.Acceleration); //Seems to be adding gravity 9.81 as an upward force to keep airborne(?)
-         //   if (_inFlightMode)
-                //CalculateMovementFixedUpdate(di);
+           _rigidbody.AddForce(transform.up * (9.81f), ForceMode.Acceleration); //Seems to be adding "positive" gravity 9.81 as an upward force 
+             //CalculateMovementFixedUpdate(); --> Moved to InputManager Script
         }
 
-        private void CalculateMovementUpdate() //MOVEMENT METHOD (LEFT AND RIGHT) ARROW KEYS(Should be public)
+        public  void CalculateMovementUpdate(float rotInput)
+        { 
+            var tempRot = transform.localRotation.eulerAngles;
+            tempRot.y += rotInput * (_speed / 3); //same speed value but now we add rotational awareness 
+            transform.localRotation = Quaternion.Euler(tempRot);
+
+        }
+        /* private void CalculateMovementUpdate()//METHOD HAS BEEN REWORKED ABOVE
         {
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                var tempRot = transform.localRotation.eulerAngles;
-                tempRot.y -= _speed / 3;
-                transform.localRotation = Quaternion.Euler(tempRot);
+                var tempRot = transform.localRotation.eulerAngles; --> Keeping this for the reworked method
+                tempRot.y -= _speed / 3; --> Same speed value will be used 
+                transform.localRotation = Quaternion.Euler(tempRot);--> Keeping this for the reworked method
             }
             if (Input.GetKey(KeyCode.RightArrow))
             {
@@ -112,9 +119,14 @@ namespace Game.Scripts.LiveObjects
                 tempRot.y += _speed / 3;
                 transform.localRotation = Quaternion.Euler(tempRot);
             }
+        }*/
+        public void CalculateMovementFixedUpdate(float direction)  //New update to handle physics-based movement
+        {
+           
+            _rigidbody.AddForce(transform.up * direction * _speed, ForceMode.Acceleration);
+            
         }
-
-        public void CalculateMovementFixedUpdate(float direction) //FIXED MOVEMENT METHOD (physics/UP AND DOWN)  SPACE AND V(Should be public)
+        /*priviate void CalculateMovementFixedUpdate() //METHOD HAS BEEN REWORKED ABOVE ^
         {
             _rigidbody.AddForce(transform.up * direction * _speed, ForceMode.Acceleration);
             /*    if (Input.GetKey(KeyCode.Space))
@@ -124,12 +136,14 @@ namespace Game.Scripts.LiveObjects
             if (Input.GetKey(KeyCode.V))
             {
             //    _rigidbody.AddForce(-transform.up * direction * _speed, ForceMode.Acceleration);
-           */
         }
+           */
+
         public void CalculateTilt(Vector2 tilt) 
-        //this method has been reworked in a way that only the movement logic is implement without having to rely on legacy input
+        //The new parameter variable handles the direction of the tilt. We can determine that in the InputManager accordingly 
             
         {
+
             float xRotation = 0;
             float zRotation = 0;
 
@@ -146,7 +160,7 @@ namespace Game.Scripts.LiveObjects
             transform.rotation = Quaternion.Euler(xRotation, transform.localRotation.eulerAngles.y, zRotation);
         }
 
-        //private void CalculateTilt() //THIS METHOD HAS BEEN REWORKED ^
+        //private void CalculateTilt() //THIS METHOD HAS BEEN REWORKED ABOVE
        
         // {
 
