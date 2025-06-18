@@ -34,7 +34,6 @@ public class InputManager : MonoBehaviour
 
         //Drone Tilt
         var tilt = _input.Drone.Tilt.ReadValue<Vector2>();
-        Debug.Log("Vector Value: " + tilt);
        _drone.CalculateTilt(tilt);
 
         //Drone Rotation
@@ -63,12 +62,22 @@ public class InputManager : MonoBehaviour
         //This method is called from within the Drone Script when flight is enabled
         _input.Player.Disable(); //Player controls won't be accesssible during this
         _input.Drone.Enable();
+        _input.Drone.Exit.performed += Exit_performed;
     }
+
+    private void Exit_performed(InputAction.CallbackContext context)
+    {
+        Debug.Log("Exit key pressed");
+        _drone.ExitFlightMode();
+    
+    }
+
     public void DisableDroneControls()
     {
         //This method is called from within the Drone Srcipt when flight is disabled
-        _input.Player.Enable();  //Return control to the Player
         _input.Drone.Disable();
+        _input.Player.Enable();  //Return control to the Player
+       
     }
 
 

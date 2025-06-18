@@ -134,6 +134,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Exit"",
+                    ""type"": ""Button"",
+                    ""id"": ""99fc3d96-a763-4cb8-83e8-0d724512ff36"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -268,6 +277,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Rotate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bbf61e75-ee66-4fce-8279-692d1aa064fc"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -283,6 +303,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Drone_Thrust = m_Drone.FindAction("Thrust", throwIfNotFound: true);
         m_Drone_Vertical = m_Drone.FindAction("Vertical", throwIfNotFound: true);
         m_Drone_Rotate = m_Drone.FindAction("Rotate", throwIfNotFound: true);
+        m_Drone_Exit = m_Drone.FindAction("Exit", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -394,6 +415,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Drone_Thrust;
     private readonly InputAction m_Drone_Vertical;
     private readonly InputAction m_Drone_Rotate;
+    private readonly InputAction m_Drone_Exit;
     public struct DroneActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -402,6 +424,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Thrust => m_Wrapper.m_Drone_Thrust;
         public InputAction @Vertical => m_Wrapper.m_Drone_Vertical;
         public InputAction @Rotate => m_Wrapper.m_Drone_Rotate;
+        public InputAction @Exit => m_Wrapper.m_Drone_Exit;
         public InputActionMap Get() { return m_Wrapper.m_Drone; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -423,6 +446,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Rotate.started += instance.OnRotate;
             @Rotate.performed += instance.OnRotate;
             @Rotate.canceled += instance.OnRotate;
+            @Exit.started += instance.OnExit;
+            @Exit.performed += instance.OnExit;
+            @Exit.canceled += instance.OnExit;
         }
 
         private void UnregisterCallbacks(IDroneActions instance)
@@ -439,6 +465,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Rotate.started -= instance.OnRotate;
             @Rotate.performed -= instance.OnRotate;
             @Rotate.canceled -= instance.OnRotate;
+            @Exit.started -= instance.OnExit;
+            @Exit.performed -= instance.OnExit;
+            @Exit.canceled -= instance.OnExit;
         }
 
         public void RemoveCallbacks(IDroneActions instance)
@@ -466,5 +495,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnThrust(InputAction.CallbackContext context);
         void OnVertical(InputAction.CallbackContext context);
         void OnRotate(InputAction.CallbackContext context);
+        void OnExit(InputAction.CallbackContext context);
     }
 }

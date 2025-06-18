@@ -42,6 +42,7 @@ namespace Game.Scripts.LiveObjects
         private void OnEnable()
         {
             InteractableZone.onZoneInteractionComplete += EnterFlightMode;
+            
         }
 
         private void EnterFlightMode(InteractableZone zone)//WILL NEED THIS TO SWAP ACTION WITHIN INTERACTABLE ZONE
@@ -61,30 +62,36 @@ namespace Game.Scripts.LiveObjects
             }
         }
 
-        private void ExitFlightMode()//NEED THIS FOR ESC KEY SWAP. Might need to make this public and call it on disable
-        {            
-            _droneCam.Priority = 9;
-            _inFlightMode = false;
-            UIManager.Instance.DroneView(false);
-            _inputManager.DisableDroneControls();//disable drone controls
-            this.transform.position = startPos; //Return drone to start position
+        public void ExitFlightMode()//--> Made public to access via the InputManager
+        {
+            if (_inFlightMode == true) //added from the update
+            {
+                _inputManager.DisableDroneControls();//disable drone controls
+                _droneCam.Priority = 9;
+                _inFlightMode = false;
+                onExitFlightmode?.Invoke(); //Added from the update
+                UIManager.Instance.DroneView(false);
+                this.transform.position = startPos; //Return drone to start position
+
+            }
+
         }
 
         private void Update()
         {
-            //if (_inFlightMode) -->  No longer needed since we validate flight mode when enabling drone controls
+            /*if (_inFlightMode) -->  Moved to exit flight method
             {
                 //I can call these two methods from the Player Manager 
                // CalculateTilt(); --> Moved to InputManager Script
               //  CalculateMovementUpdate();  --> Moved to InputManager Script
-
-                if (Input.GetKeyDown(KeyCode.Escape))//ESC CHANGE TO NEW INPUT. Could move all this to the disable?
+            */
+            /*    if (Input.GetKeyDown(KeyCode.Escape))//ESC CHANGE TO NEW INPUT. Could move all this to the disable?
                 {
                     _inFlightMode = false;
                     onExitFlightmode?.Invoke();
                     ExitFlightMode();
-                }
-            }
+                }*/
+            
         }
 
         private void Start()
