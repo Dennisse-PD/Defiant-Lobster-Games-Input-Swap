@@ -64,6 +64,7 @@ namespace Game.Scripts.LiveObjects
 
         public void ExitFlightMode()//--> Made public to access via the InputManager
         {
+            //Need to make it so the drone stops moving for good, no animations or anything
             if (_inFlightMode == true) //added from the update
             {
                 _inputManager.DisableDroneControls();//disable drone controls

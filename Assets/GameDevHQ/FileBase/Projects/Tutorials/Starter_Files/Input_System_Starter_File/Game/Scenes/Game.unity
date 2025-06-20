@@ -3030,7 +3030,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _zoneType: 1
   _zoneID: 6
-  _requiredID: -7
+  _requiredID: 5
   _displayMessage: Break the Crate
   _zoneItems: []
   _inventoryIcon: {fileID: 21300000, guid: 88841726d7ebbfc46bf799ee1bfb7d3f, type: 3}
@@ -10038,7 +10038,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5779097134961922744, guid: 1d553f90302742946bbf45996165949c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 16.26
+      value: 6.57
       objectReference: {fileID: 0}
     - target: {fileID: 5779097134961922744, guid: 1d553f90302742946bbf45996165949c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -12328,7 +12328,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 1.02e-43, y: 0, z: 1.4955e-41, w: 0}
+  m_BoundingSphereOverride: {x: 1.02e-43, y: 2.2e-44, z: 4.013e-42, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -17093,7 +17093,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _zoneType: 1
   _zoneID: 7
-  _requiredID: -8
+  _requiredID: 6
   _displayMessage: Reset
   _zoneItems: []
   _inventoryIcon: {fileID: 0}
@@ -17125,7 +17125,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 972744894}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.22150683, y: 0.046705727, z: -0.010622003, w: 0.9739818}
+  m_LocalRotation: {x: 0.22150683, y: 0.04670651, z: -0.010622182, w: 0.97398174}
   m_LocalPosition: {x: -0.48177326, y: 4.5286655, z: -4.833789}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -34204,7 +34204,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _zoneType: 1
   _zoneID: 4
-  _requiredID: -3
+  _requiredID: -5
   _displayMessage: fly drone
   _zoneItems: []
   _inventoryIcon: {fileID: 0}
@@ -38508,6 +38508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 359860633}
+  _interactable: {fileID: 965513072}
   _drone: {fileID: 1073608670}
 --- !u!136 &2071373265
 CapsuleCollider:
@@ -39793,10 +39794,10 @@ SceneRoots:
   m_Roots:
   - {fileID: 1550399104}
   - {fileID: 1266060214}
-  - {fileID: 2071373263}
   - {fileID: 887137146}
   - {fileID: 359860634}
   - {fileID: 1625874021}
   - {fileID: 621990727}
+  - {fileID: 2071373263}
   - {fileID: 350562255}
   - {fileID: 763561850}

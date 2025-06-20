@@ -7,8 +7,12 @@ using Game.Scripts.UI;
 
 namespace Game.Scripts.LiveObjects
 {
+ 
+    
+ 
     public class InteractableZone : MonoBehaviour
     {
+       
         private enum ZoneType
         {
             Collectable,
@@ -69,12 +73,13 @@ namespace Game.Scripts.LiveObjects
         private void OnEnable()
         {
             InteractableZone.onZoneInteractionComplete += SetMarker;
+           
 
         }
-
+    
         private void OnTriggerEnter(Collider other)
         {
-            
+           
             Debug.Log($"OnTriggerEnter: player entered zone {_zoneID} | currentID: {_currentZoneID}, requiredID: {_requiredID}, zoneType: {_zoneType}");
 
     if (other.CompareTag("Player") && _currentZoneID > _requiredID)
@@ -131,12 +136,15 @@ namespace Game.Scripts.LiveObjects
 
         private void Update()
         {
-            if (_inZone == true)
-            {
+          
+            //--> The following switch cases can be refactored into public methods to be called from the Input Manager
 
-                if (Input.GetKeyDown(_zoneKeyInput) && _keyState != KeyState.PressHold)
+            /*public method PressAction
+            if (_inZone == true) //needs to be pre
+            {
+                  if (Input.GetKeyDown(_zoneKeyInput) && _keyState != KeyState.PressHold)//we dont need to validate the hold, so this is unnessary 
                 {
-                    //press
+                    //One-clik Action - Collect Items, enter vehicles 
                     switch (_zoneType)
                     {
                         case ZoneType.Collectable:
@@ -158,6 +166,8 @@ namespace Game.Scripts.LiveObjects
                             break;
                     }
                 }
+                // Hold Action - Hack Cameras
+             
                 else if (Input.GetKey(_zoneKeyInput) && _keyState == KeyState.PressHold && _inHoldState == false)
                 {
                     _inHoldState = true;
@@ -171,7 +181,7 @@ namespace Game.Scripts.LiveObjects
                             break;           
                     }
                 }
-
+                //Cancel action - reset/deplete progress bar
                 if (Input.GetKeyUp(_zoneKeyInput) && _keyState == KeyState.PressHold)
                 {
                     _inHoldState = false;
@@ -179,10 +189,75 @@ namespace Game.Scripts.LiveObjects
                 }
 
                
+            }*/
+        }
+
+        private void Interact_HoldKey_canceled(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        {
+            KeyReleaseAction();
+        }
+
+        private void Interact_HoldKey_started(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        {
+            KeyHoldAction();
+        }
+
+        private void Interact_PressKey_performed(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        {
+            KeyPressAction();
+        }
+
+        //Switch Action Methods --> Called from the InputManager Script
+        public void KeyPressAction()
+        {
+            //Actions that require a single key press
+            Debug.Log("Key Press Method");
+            if (_inZone  == true)
+
+            switch (_zoneType)
+            {
+                case ZoneType.Collectable:
+                    if (!_itemsCollected)
+                    {
+                        CollectItems();
+                        _itemsCollected = true;
+                        UIManager.Instance.DisplayInteractableZoneMessage(false);
+                    }
+                    break;
+
+                case ZoneType.Action:
+                    if (!_actionPerformed)
+                    {
+                        PerformAction();
+                        _actionPerformed = true;
+                        UIManager.Instance.DisplayInteractableZoneMessage(false);
+                    }
+                    break;
             }
         }
-       
-        private void CollectItems()
+        public void KeyHoldAction()
+        {
+            //Actions that require the key to be held down
+            if (_inZone == true || _keyState == KeyState.PressHold || _inHoldState)
+
+            _inHoldState = true;
+
+            if (_zoneType == ZoneType.HoldAction)
+                PerformHoldAction();
+
+        }
+        public void KeyReleaseAction()
+        {
+            //To cancel the Hold Action and reset the progress bar
+            if (_keyState == KeyState.PressHold)
+            {
+                _inHoldState = false;
+                onHoldEnded?.Invoke(_zoneID);
+            }
+
+        }
+      
+        public void CollectItems()
         {
             foreach (var item in _zoneItems)
             {
@@ -197,7 +272,7 @@ namespace Game.Scripts.LiveObjects
 
         }
 
-        private void PerformAction()
+        public void PerformAction()
         {
             foreach (var item in _zoneItems)
             {
@@ -210,7 +285,7 @@ namespace Game.Scripts.LiveObjects
             onZoneInteractionComplete?.Invoke(this);
         }
 
-        private void PerformHoldAction()
+        public void PerformHoldAction()
         {
             UIManager.Instance.DisplayInteractableZoneMessage(false);
             onHoldStarted?.Invoke(_zoneID);
@@ -255,7 +330,7 @@ namespace Game.Scripts.LiveObjects
             if (other.CompareTag("Player"))
             {
                 //here we should show the UI message instead of the case
-                _inZone = true; //this was set to false making the drone unusable 
+                _inZone = false; //this was set to false making the drone unusable 
                 UIManager.Instance.DisplayInteractableZoneMessage(false);//let's
                
             }

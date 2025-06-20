@@ -35,6 +35,24 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Interact _PressKey"",
+                    ""type"": ""Button"",
+                    ""id"": ""5b44bfca-4939-4c89-86ac-429d67aa37d6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact_HoldKey"",
+                    ""type"": ""Button"",
+                    ""id"": ""401d3482-a20d-409e-9f2a-de073ca7ba33"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -92,6 +110,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""945db559-2ed6-4da1-9991-27851383c15e"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact _PressKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""67a9a521-a21e-4c28-bb71-76b5322f9a17"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact_HoldKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -297,6 +337,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
+        m_Player_Interact_PressKey = m_Player.FindAction("Interact _PressKey", throwIfNotFound: true);
+        m_Player_Interact_HoldKey = m_Player.FindAction("Interact_HoldKey", throwIfNotFound: true);
         // Drone
         m_Drone = asset.FindActionMap("Drone", throwIfNotFound: true);
         m_Drone_Tilt = m_Drone.FindAction("Tilt", throwIfNotFound: true);
@@ -366,11 +408,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
+    private readonly InputAction m_Player_Interact_PressKey;
+    private readonly InputAction m_Player_Interact_HoldKey;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
         public PlayerActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
+        public InputAction @Interact_PressKey => m_Wrapper.m_Player_Interact_PressKey;
+        public InputAction @Interact_HoldKey => m_Wrapper.m_Player_Interact_HoldKey;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -383,6 +429,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @Interact_PressKey.started += instance.OnInteract_PressKey;
+            @Interact_PressKey.performed += instance.OnInteract_PressKey;
+            @Interact_PressKey.canceled += instance.OnInteract_PressKey;
+            @Interact_HoldKey.started += instance.OnInteract_HoldKey;
+            @Interact_HoldKey.performed += instance.OnInteract_HoldKey;
+            @Interact_HoldKey.canceled += instance.OnInteract_HoldKey;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -390,6 +442,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @Interact_PressKey.started -= instance.OnInteract_PressKey;
+            @Interact_PressKey.performed -= instance.OnInteract_PressKey;
+            @Interact_PressKey.canceled -= instance.OnInteract_PressKey;
+            @Interact_HoldKey.started -= instance.OnInteract_HoldKey;
+            @Interact_HoldKey.performed -= instance.OnInteract_HoldKey;
+            @Interact_HoldKey.canceled -= instance.OnInteract_HoldKey;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -488,6 +546,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnInteract_PressKey(InputAction.CallbackContext context);
+        void OnInteract_HoldKey(InputAction.CallbackContext context);
     }
     public interface IDroneActions
     {

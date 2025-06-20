@@ -14,6 +14,10 @@ public class InputManager : MonoBehaviour
     //Input Actions
     private PlayerInputActions _input;
 
+    //Interactable zones
+     [SerializeField] private InteractableZone _interactable;
+     //[SerializeField] GameObject[] _interactableZone;
+
     //Drone 
     [SerializeField]
     private Drone _drone; //reference to drone object
@@ -23,25 +27,54 @@ public class InputManager : MonoBehaviour
     void Start()
     {
         InitializePlayerInput();
+      
     }
-
-    // Update is called once per frame
     void Update()
     {
         //Player Movement
         var move = _input.Player.Move.ReadValue<Vector2>(); //Using the context value from our vector2 input, we can register direction
         _player.CalcutateMovement(move); //uses the parameter variable which is of type vector 2
 
+        //Interactables(Player interactions)
+        _input.Player.Interact_PressKey.performed += Interact_PressKey_performed;
+        _input.Player.Interact_HoldKey.started += Interact_HoldKey_started;
+        _input.Player.Interact_HoldKey.canceled += Interact_HoldKey_canceled;
+
+
         //Drone Tilt
         var tilt = _input.Drone.Tilt.ReadValue<Vector2>();
-       _drone.CalculateTilt(tilt);
+        _drone.CalculateTilt(tilt);
 
         //Drone Rotation
         var rotInput = _input.Drone.Rotate.ReadValue<float>();
         _drone.CalculateMovementUpdate(rotInput);
 
+    }
+
+
+    private void Interact_HoldKey_canceled(InputAction.CallbackContext context)
+    {
+        Debug.Log("Canceled Key Hold");
+        _interactable.KeyReleaseAction();
+    }
+
+    private void Interact_HoldKey_started(InputAction.CallbackContext context)
+    {
+        Debug.Log("Key Hold Started");
+        _interactable.KeyHoldAction();
+    }
+    
+
+    //Interactable Action Events
+    private void Interact_PressKey_performed(InputAction.CallbackContext context)
+    {
+        Debug.Log("Press Key Action");
+        _interactable.KeyPressAction();
 
     }
+
+    // Update is called once per frame
+    
     private void FixedUpdate()
     {
         //Drone Up and Down
@@ -53,7 +86,7 @@ public class InputManager : MonoBehaviour
     {
         _input = new PlayerInputActions();
         _input.Player.Enable();
-        //generate peform callback here
+        
         
     }
    
