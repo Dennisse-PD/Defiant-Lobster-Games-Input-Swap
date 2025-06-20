@@ -16,7 +16,8 @@ public class InputManager : MonoBehaviour
 
     //Interactable zones
      [SerializeField] private InteractableZone _interactable;
-     //[SerializeField] GameObject[] _interactableZone;
+    //[SerializeField] GameObject[] _interactableZone;
+    private InteractableZone _currentInteractable;
 
     //Drone 
     [SerializeField]
@@ -54,22 +55,31 @@ public class InputManager : MonoBehaviour
 
     private void Interact_HoldKey_canceled(InputAction.CallbackContext context)
     {
-        Debug.Log("Canceled Key Hold");
-        _interactable.KeyReleaseAction();
+        if (_currentInteractable != null)
+        {
+            Debug.Log("Canceled Key Hold");
+            _currentInteractable.KeyReleaseAction();
+        }
     }
 
     private void Interact_HoldKey_started(InputAction.CallbackContext context)
     {
-        Debug.Log("Key Hold Started");
-        _interactable.KeyHoldAction();
+        if (_currentInteractable != null)
+        {
+            Debug.Log("Key Hold Started");
+            _currentInteractable.KeyHoldAction();
+        }
     }
     
 
     //Interactable Action Events
     private void Interact_PressKey_performed(InputAction.CallbackContext context)
     {
-        Debug.Log("Press Key Action");
-        _interactable.KeyPressAction();
+        if (_currentInteractable != null) //checking that there is an active zone
+        {
+            Debug.Log("Press Key Action");
+            _currentInteractable.KeyPressAction();
+        }
 
     }
 
@@ -112,6 +122,10 @@ public class InputManager : MonoBehaviour
         _input.Player.Enable();  //Return control to the Player
        
     }
+   
 
-
+    public void SetCurrentInteractableZone(InteractableZone zone)
+    {
+        _currentInteractable = zone;
+    }
 }

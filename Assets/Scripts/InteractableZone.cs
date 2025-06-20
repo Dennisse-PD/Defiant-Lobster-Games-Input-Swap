@@ -84,7 +84,10 @@ namespace Game.Scripts.LiveObjects
 
     if (other.CompareTag("Player") && _currentZoneID > _requiredID)
     {
-        Debug.Log("Passed the zone requirement check");          
+                InputManager inputManager = FindObjectOfType<InputManager>();//findins specific obj with classe
+                if (inputManager != null)//Best practice check
+                    inputManager.SetCurrentInteractableZone(this); // identify self
+                Debug.Log("Passed the zone requirement check");          
                 switch (_zoneType)
                 {
                     case ZoneType.Collectable:
@@ -323,16 +326,26 @@ namespace Game.Scripts.LiveObjects
             else
                 _marker.SetActive(false);
         }
-        
+
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Player"))
+            /*if (other.CompareTag("Player"))
             {
                 //here we should show the UI message instead of the case
                 _inZone = false; //this was set to false making the drone unusable 
                 UIManager.Instance.DisplayInteractableZoneMessage(false);//let's
                
+            }*/
+            if (other.CompareTag("Player"))
+            {
+                _inZone = false;
+                UIManager.Instance.DisplayInteractableZoneMessage(false);
+
+                InputManager inputManager = FindObjectOfType<InputManager>();
+                if (inputManager != null)
+                    inputManager.SetCurrentInteractableZone(null); // reset zone 
+
             }
         }
 
