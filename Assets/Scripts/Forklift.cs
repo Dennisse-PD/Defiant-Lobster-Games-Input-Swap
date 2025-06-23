@@ -23,6 +23,10 @@ namespace Game.Scripts.LiveObjects
         public static event Action onDriveModeEntered;
         public static event Action onDriveModeExited;
 
+        //Input manager to enable and disable input maps
+        [SerializeField]
+        private InputManager _inputManager;
+
         private void OnEnable()
         {
             InteractableZone.onZoneInteractionComplete += EnterDriveMode;
@@ -30,6 +34,7 @@ namespace Game.Scripts.LiveObjects
 
         private void EnterDriveMode(InteractableZone zone)
         {
+            Debug.Log("Drive mode is active");
             if (_inDriveMode !=true && zone.GetZoneID() == 5) //Enter ForkLift
             {
                 _inDriveMode = true;
@@ -37,34 +42,42 @@ namespace Game.Scripts.LiveObjects
                 onDriveModeEntered?.Invoke();
                 _driverModel.SetActive(true);
                 _interactableZone.CompleteTask(5);
+                //Initialize forklift here
+                _inputManager.InitializeForkliftInput();
             }
         }
 
-        private void ExitDriveMode()
+       public void ExitDriveMode()
         {
             _inDriveMode = false;
             _forkliftCam.Priority = 9;            
             _driverModel.SetActive(false);
             onDriveModeExited?.Invoke();
+            //_inputManager.DisableForkliftControls();
             
         }
 
         private void Update()
         {
-            if (_inDriveMode == true)
+            if (_inDriveMode == true)//validation not needed since the Action Map being active already tells us this is true
             {
                 LiftControls();
-                CalcutateMovement();
-                if (Input.GetKeyDown(KeyCode.Escape))
-                    ExitDriveMode();
+             //   CalcutateMovement();
+               if (Input.GetKeyDown(KeyCode.Escape))//UPGRADE
+                 ExitDriveMode();
             }
 
         }
 
-        private void CalcutateMovement()
+        public void CalcutateMovement(Vector2 inputValue) //made public so that it can be called from the InputManager
         {
-            float h = Input.GetAxisRaw("Horizontal");
-            float v = Input.GetAxisRaw("Vertical");
+            //float h = Input.GetAxisRaw("Horizontal");
+            //float v = Input.GetAxisRaw("Vertical");
+
+            //Rotation will be calculate using the input value we register in the Input Manager
+            float h = inputValue.x; 
+            float v = inputValue.y;
+
             var direction = new Vector3(0, 0, v);
             var velocity = direction * _speed;
 
@@ -78,15 +91,17 @@ namespace Game.Scripts.LiveObjects
             }
         }
 
-        private void LiftControls()
+        private void LiftControls() //No longer neccessary, individual methods will be called in InputManager
         {
-            if (Input.GetKey(KeyCode.R))
-                LiftUpRoutine();
-            else if (Input.GetKey(KeyCode.T))
-                LiftDownRoutine();
+                if (Input.GetKey(KeyCode.R))
+                    LiftUpRoutine();
+                else if (Input.GetKey(KeyCode.T))
+                    LiftDownRoutine();
+            
+               
         }
 
-        private void LiftUpRoutine()
+        private void LiftUpRoutine() //LIFT ROUTINE (No upgrade needed)
         {
             if (_lift.transform.localPosition.y < _liftUpperLimit.y)
             {
@@ -98,7 +113,7 @@ namespace Game.Scripts.LiveObjects
                 _lift.transform.localPosition = _liftUpperLimit;
         }
 
-        private void LiftDownRoutine()
+        private void LiftDownRoutine() //Lif Down(No upgrade needed)
         {
             if (_lift.transform.localPosition.y > _liftLowerLimit.y)
             {

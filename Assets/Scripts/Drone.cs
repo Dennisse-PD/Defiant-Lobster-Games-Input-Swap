@@ -28,7 +28,7 @@ namespace Game.Scripts.LiveObjects
         [SerializeField]
         private InteractableZone _interactableZone;
 
-        //Input Manager 
+        //Input Manager used to initialized the drone controls and disable the player
         [SerializeField]
         private InputManager _inputManager;
 

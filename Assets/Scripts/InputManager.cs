@@ -23,6 +23,10 @@ public class InputManager : MonoBehaviour
     [SerializeField]
     private Drone _drone; //reference to drone object
 
+    //Forklift
+    [SerializeField]
+    private Forklift _forklift; //reference to forklift object
+
     //This script handles the input. i.e Performed actions and such.
     // Start is called before the first frame update
     void Start()
@@ -41,7 +45,6 @@ public class InputManager : MonoBehaviour
         _input.Player.Interact_HoldKey.started += Interact_HoldKey_started;
         _input.Player.Interact_HoldKey.canceled += Interact_HoldKey_canceled;
 
-
         //Drone Tilt
         var tilt = _input.Drone.Tilt.ReadValue<Vector2>();
         _drone.CalculateTilt(tilt);
@@ -49,6 +52,11 @@ public class InputManager : MonoBehaviour
         //Drone Rotation
         var rotInput = _input.Drone.Rotate.ReadValue<float>();
         _drone.CalculateMovementUpdate(rotInput);
+
+        //Forklift Movement
+        var forkliftMove = _input.Forklift.Move.ReadValue<Vector2>();//context variable is used to calculate based on input
+        //forlift method here
+        _forklift.CalcutateMovement(forkliftMove);
 
     }
 
@@ -95,8 +103,7 @@ public class InputManager : MonoBehaviour
     private void InitializePlayerInput()
     {
         _input = new PlayerInputActions();
-        _input.Player.Enable();
-        
+        _input.Player.Enable(); 
         
     }
    
@@ -105,16 +112,29 @@ public class InputManager : MonoBehaviour
         //This method is called from within the Drone Script when flight is enabled
         _input.Player.Disable(); //Player controls won't be accesssible during this
         _input.Drone.Enable();
-        _input.Drone.Exit.performed += Exit_performed;
+        _input.Drone.Exit.performed += Exit_performed;//Placed in the Initialize method because we are only subcribing to this once(when drone is active)
+    }
+    public void InitializeForkliftInput()
+    {
+        _input.Player.Disable();
+        _input.Forklift.Enable();
+       // _input.Forklift.ExitVehicle.performed += ExitVehicle_performed;
     }
 
+    //private void ExitVehicle_performed(InputAction.CallbackContext context)
+    //{
+      //  Debug.Log("Exit Forklift!");
+      //  _forklift.ExitDriveMode();
+   // }
+
+    //Exit Drone
     private void Exit_performed(InputAction.CallbackContext context)
     {
-        Debug.Log("Exit key pressed");
+        Debug.Log("Exit Drone!");
         _drone.ExitFlightMode();
     
     }
-
+    //Disabling Inputs
     public void DisableDroneControls()
     {
         //This method is called from within the Drone Srcipt when flight is disabled
@@ -123,9 +143,21 @@ public class InputManager : MonoBehaviour
        
     }
    
-
+    public void DisableForkliftControls()
+    {
+        _input.Forklift.Disable();
+        _input.Player.Enable();
+    }
+   
+    //Needed to check which interactable zone is currently active
     public void SetCurrentInteractableZone(InteractableZone zone)
     {
         _currentInteractable = zone;
     }
+    //Forklif Controls to add:
+    //1. Movement
+    //2. Lift up and Lift Down(seperate keys)
+    //3. Exit 
+    
+
 }

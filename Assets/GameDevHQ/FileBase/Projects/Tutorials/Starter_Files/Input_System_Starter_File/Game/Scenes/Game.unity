@@ -6556,6 +6556,7 @@ MonoBehaviour:
   _forkliftCam: {fileID: 972744896}
   _driverModel: {fileID: 1509951838}
   _interactableZone: {fileID: 1277958656}
+  _inputManager: {fileID: 2071373264}
 --- !u!65 &402105200
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12328,7 +12329,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 1.02e-43, y: 2.2e-44, z: 4.013e-42, w: 0}
+  m_BoundingSphereOverride: {x: 1.02e-43, y: 1e-45, z: 1.2399e-41, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -38510,6 +38511,7 @@ MonoBehaviour:
   _player: {fileID: 359860633}
   _interactable: {fileID: 965513072}
   _drone: {fileID: 1073608670}
+  _forklift: {fileID: 402105197}
 --- !u!136 &2071373265
 CapsuleCollider:
   m_ObjectHideFlags: 0
