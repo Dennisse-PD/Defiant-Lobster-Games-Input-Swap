@@ -53,7 +53,7 @@ namespace Game.Scripts.LiveObjects
             _forkliftCam.Priority = 9;            
             _driverModel.SetActive(false);
             onDriveModeExited?.Invoke();
-            //_inputManager.DisableForkliftControls();
+           
             
         }
 
@@ -61,10 +61,10 @@ namespace Game.Scripts.LiveObjects
         {
             if (_inDriveMode == true)//validation not needed since the Action Map being active already tells us this is true
             {
-                LiftControls();
+                //LiftControls();
              //   CalcutateMovement();
-               if (Input.GetKeyDown(KeyCode.Escape))//UPGRADE
-                 ExitDriveMode();
+              // if (Input.GetKeyDown(KeyCode.Escape))//UPGRADE
+                // ExitDriveMode();
             }
 
         }
@@ -91,17 +91,17 @@ namespace Game.Scripts.LiveObjects
             }
         }
 
-        private void LiftControls() //No longer neccessary, individual methods will be called in InputManager
-        {
-                if (Input.GetKey(KeyCode.R))
-                    LiftUpRoutine();
-                else if (Input.GetKey(KeyCode.T))
-                    LiftDownRoutine();
-            
-               
-        }
+        /* private void LiftControls() --->Refactored into the LiftRoutine Method
+         {
+                 if (Input.GetKey(KeyCode.R))
+                     LiftUpRoutine();
+                 else if (Input.GetKey(KeyCode.T))
+                     LiftDownRoutine();
 
-        private void LiftUpRoutine() //LIFT ROUTINE (No upgrade needed)
+
+         }*/
+
+        /*public void LiftUpRoutine() ---> Refactured into the LiftRoutine Method
         {
             if (_lift.transform.localPosition.y < _liftUpperLimit.y)
             {
@@ -113,7 +113,7 @@ namespace Game.Scripts.LiveObjects
                 _lift.transform.localPosition = _liftUpperLimit;
         }
 
-        private void LiftDownRoutine() //Lif Down(No upgrade needed)
+        public void LiftDownRoutine() //
         {
             if (_lift.transform.localPosition.y > _liftLowerLimit.y)
             {
@@ -123,6 +123,15 @@ namespace Game.Scripts.LiveObjects
             }
             else if (_lift.transform.localPosition.y <= _liftUpperLimit.y)
                 _lift.transform.localPosition = _liftLowerLimit;
+        }*/
+        public void LiftRoutine(float liftInput) //---> Will read float values from 1D Axis Input between -1f-1f
+        {
+           
+
+            Vector3 tempPos = _lift.transform.localPosition;
+            tempPos.y += liftInput * Time.deltaTime * _liftSpeed;
+            tempPos.y = Mathf.Clamp(tempPos.y, _liftLowerLimit.y, _liftUpperLimit.y); //Clamp within range
+            _lift.transform.localPosition = tempPos;
         }
 
         private void OnDisable()

@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
+    //--->This script handles the input. i.e Performed actions and such<--
+
     //Player
     [SerializeField]
     private Player _player; 
@@ -27,7 +29,7 @@ public class InputManager : MonoBehaviour
     [SerializeField]
     private Forklift _forklift; //reference to forklift object
 
-    //This script handles the input. i.e Performed actions and such.
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -58,9 +60,16 @@ public class InputManager : MonoBehaviour
         //forlift method here
         _forklift.CalcutateMovement(forkliftMove);
 
+        //Forklift Lift up using arrow keys
+        var liftInput = _input.Forklift.Lift.ReadValue<float>();
+        if (liftInput != 0) //Since 1D takes input between -1 and 1 this condition is always met when input is registered
+        {
+            _forklift.LiftRoutine(liftInput);
+        }
+
     }
 
-
+    //----->Input Actions<-----
     private void Interact_HoldKey_canceled(InputAction.CallbackContext context)
     {
         if (_currentInteractable != null)
@@ -100,13 +109,14 @@ public class InputManager : MonoBehaviour
         if (direction != 0) // 1D Axis gives us a value of 1 or -1 depending on cardinal direction so this is always true if there is input
             _drone.CalculateMovementFixedUpdate(-direction); //-direction to invert direction
     }
+    //init Player input
     private void InitializePlayerInput()
     {
         _input = new PlayerInputActions();
         _input.Player.Enable(); 
         
     }
-   
+   //init drone input
     public void InitializeDroneInput()
     {
         //This method is called from within the Drone Script when flight is enabled
@@ -114,18 +124,27 @@ public class InputManager : MonoBehaviour
         _input.Drone.Enable();
         _input.Drone.Exit.performed += Exit_performed;//Placed in the Initialize method because we are only subcribing to this once(when drone is active)
     }
+    //init forklift input
     public void InitializeForkliftInput()
     {
         _input.Player.Disable();
         _input.Forklift.Enable();
-       // _input.Forklift.ExitVehicle.performed += ExitVehicle_performed;
+
+        //Events
+        _input.Forklift.ExitVehicle.performed += ExitVehicle_performed;
+        
     }
 
-    //private void ExitVehicle_performed(InputAction.CallbackContext context)
-    //{
-      //  Debug.Log("Exit Forklift!");
-      //  _forklift.ExitDriveMode();
-   // }
+  
+
+    //Exit Forklift
+    private void ExitVehicle_performed(InputAction.CallbackContext context)
+    {
+        Debug.Log("Exit Forklift!");
+        DisableForkliftControls();
+        _forklift.ExitDriveMode();
+        
+    }
 
     //Exit Drone
     private void Exit_performed(InputAction.CallbackContext context)
@@ -142,7 +161,7 @@ public class InputManager : MonoBehaviour
         _input.Player.Enable();  //Return control to the Player
        
     }
-   
+   //Disable forklift input
     public void DisableForkliftControls()
     {
         _input.Forklift.Disable();
@@ -154,10 +173,7 @@ public class InputManager : MonoBehaviour
     {
         _currentInteractable = zone;
     }
-    //Forklif Controls to add:
-    //1. Movement
-    //2. Lift up and Lift Down(seperate keys)
-    //3. Exit 
+ 
     
 
 }
