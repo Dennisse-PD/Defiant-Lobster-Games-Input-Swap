@@ -52,7 +52,7 @@ namespace Game.Scripts.Player
                 Debug.Log("Failed to connect the Animator");
         }
 
-        private void Update() //MOVEMENT
+        private void Update() 
         {
            // if (_canMove == true) --> This is moved to the CalculateMovement Method
               //  CalcutateMovement();
@@ -65,8 +65,11 @@ namespace Game.Scripts.Player
             if (_canMove == true) //Moved here so we can still validate movement without having to overhaul unnecessarily  
             {
                 _playerGrounded = _controller.isGrounded;
-                float h = Input.GetAxisRaw("Horizontal");
-                float v = Input.GetAxisRaw("Vertical");
+                //float h = Input.GetAxisRaw("Horizontal");
+                //float v = Input.GetAxisRaw("Vertical");
+
+                float h = move.x; // Horitzontal 
+                float v = move.y; // Vertical
 
                 transform.Rotate(transform.up, h * 3f);//If you want the character to rotate faster, you can add a multiplier
 
