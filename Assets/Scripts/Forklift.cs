@@ -52,8 +52,7 @@ namespace Game.Scripts.LiveObjects
             _inDriveMode = false;
             _forkliftCam.Priority = 9;            
             _driverModel.SetActive(false);
-            onDriveModeExited?.Invoke();
-           
+            onDriveModeExited?.Invoke(); 
             
         }
 

@@ -48,19 +48,25 @@ public class InputManager : MonoBehaviour
         _input.Player.Interact_HoldKey.canceled += Interact_HoldKey_canceled;
 
         //Drone Tilt
+
         var tilt = _input.Drone.Tilt.ReadValue<Vector2>();
         _drone.CalculateTilt(tilt);
 
         //Drone Rotation
         var rotInput = _input.Drone.Rotate.ReadValue<float>();
-        _drone.CalculateMovementUpdate(rotInput);
+        if (rotInput != 0) //Since 1D takes input between -1 and 1 this condition is always met when input is registered
+        {
+            _drone.CalculateMovementUpdate(rotInput);
+        }
+      
+        
 
         //Forklift Movement
         var forkliftMove = _input.Forklift.Move.ReadValue<Vector2>();//context variable is used to calculate based on input
         //forlift method here
         _forklift.CalcutateMovement(forkliftMove);
 
-        //Forklift Lift up using arrow keys
+        //Forklift Lift using arrow keys
         var liftInput = _input.Forklift.Lift.ReadValue<float>();
         if (liftInput != 0) //Since 1D takes input between -1 and 1 this condition is always met when input is registered
         {
@@ -104,7 +110,8 @@ public class InputManager : MonoBehaviour
     
     private void FixedUpdate()
     {
-        //Drone Up and Down
+
+        //Drone Up and Down drone movement 
         var direction = _input.Drone.Vertical.ReadValue<float>();
         if (direction != 0) // 1D Axis gives us a value of 1 or -1 depending on cardinal direction so this is always true if there is input
             _drone.CalculateMovementFixedUpdate(-direction); //-direction to invert direction
@@ -130,7 +137,7 @@ public class InputManager : MonoBehaviour
         _input.Player.Disable();
         _input.Forklift.Enable();
 
-        //Events
+        //Exit event
         _input.Forklift.ExitVehicle.performed += ExitVehicle_performed;
         
     }

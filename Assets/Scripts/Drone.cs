@@ -45,7 +45,7 @@ namespace Game.Scripts.LiveObjects
             
         }
 
-        private void EnterFlightMode(InteractableZone zone)//WILL NEED THIS TO SWAP ACTION WITHIN INTERACTABLE ZONE
+        private void EnterFlightMode(InteractableZone zone)
         {
             if (_inFlightMode != true && zone.GetZoneID() == 4) // drone Scene
             {
@@ -101,8 +101,8 @@ namespace Game.Scripts.LiveObjects
         }
         private void FixedUpdate() 
         {
-            //rigidbody --> moved to calculate method
-           _rigidbody.AddForce(transform.up * (9.81f), ForceMode.Acceleration); //Seems to be adding "positive" gravity 9.81 as an upward force 
+            
+           _rigidbody.AddForce(transform.up * (9.81f), ForceMode.Acceleration); //Seems to be adding gravity to ground the object
              //CalculateMovementFixedUpdate(); --> Moved to InputManager Script
         }
 
@@ -130,7 +130,8 @@ namespace Game.Scripts.LiveObjects
         }*/
         public void CalculateMovementFixedUpdate(float direction)  //New update to handle physics-based movement
         {
-           
+            
+
             _rigidbody.AddForce(transform.up * direction * _speed, ForceMode.Acceleration);
             
         }
