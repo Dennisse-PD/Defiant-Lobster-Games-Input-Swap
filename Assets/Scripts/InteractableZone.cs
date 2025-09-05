@@ -84,7 +84,7 @@ namespace Game.Scripts.LiveObjects
 
     if (other.CompareTag("Player") && _currentZoneID > _requiredID)
     {
-                InputManager inputManager = FindObjectOfType<InputManager>();//findins specific obj with classe
+                InputManager inputManager = FindObjectOfType<InputManager>();//finding specific obj with class
                 if (inputManager != null)//Best practice check
                     inputManager.SetCurrentInteractableZone(this); // identify self
                 Debug.Log("Passed the zone requirement check");          
@@ -93,7 +93,7 @@ namespace Game.Scripts.LiveObjects
                     case ZoneType.Collectable:
                         if (_itemsCollected == false)
                         {
-                            Debug.Log("C4 Zonetype working!");
+                            Debug.Log("  Zonetype working!");
                             _inZone = true;
                             if (_displayMessage != null)
                             {
@@ -334,7 +334,7 @@ namespace Game.Scripts.LiveObjects
             {
                 //here we should show the UI message instead of the case
                 _inZone = false; //this was set to false making the drone unusable 
-                UIManager.Instance.DisplayInteractableZoneMessage(false);//let's
+                UIManager.Instance.DisplayInteractableZoneMessage(false);
                
             }*/
             if (other.CompareTag("Player"))

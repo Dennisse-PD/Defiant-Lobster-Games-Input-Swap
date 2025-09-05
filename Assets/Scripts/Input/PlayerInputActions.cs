@@ -53,6 +53,24 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Hack_Cam_View"",
+                    ""type"": ""Button"",
+                    ""id"": ""b7c3cc66-acee-4e0f-b9c1-96f569b53893"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Exit_Hack_Cam"",
+                    ""type"": ""Button"",
+                    ""id"": ""072f78e2-d121-469e-8fdf-295f5c2c7bce"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -163,6 +181,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Interact_HoldKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a42d492d-d96d-443c-8e24-9d66135f18aa"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hack_Cam_View"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ea1e346-e298-438a-a2cd-f4dcfca47ca8"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Exit_Hack_Cam"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -711,6 +751,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Interact_PressKey = m_Player.FindAction("Interact _PressKey", throwIfNotFound: true);
         m_Player_Interact_HoldKey = m_Player.FindAction("Interact_HoldKey", throwIfNotFound: true);
+        m_Player_Hack_Cam_View = m_Player.FindAction("Hack_Cam_View", throwIfNotFound: true);
+        m_Player_Exit_Hack_Cam = m_Player.FindAction("Exit_Hack_Cam", throwIfNotFound: true);
         // Drone
         m_Drone = asset.FindActionMap("Drone", throwIfNotFound: true);
         m_Drone_Tilt = m_Drone.FindAction("Tilt", throwIfNotFound: true);
@@ -789,6 +831,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Interact_PressKey;
     private readonly InputAction m_Player_Interact_HoldKey;
+    private readonly InputAction m_Player_Hack_Cam_View;
+    private readonly InputAction m_Player_Exit_Hack_Cam;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -796,6 +840,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Interact_PressKey => m_Wrapper.m_Player_Interact_PressKey;
         public InputAction @Interact_HoldKey => m_Wrapper.m_Player_Interact_HoldKey;
+        public InputAction @Hack_Cam_View => m_Wrapper.m_Player_Hack_Cam_View;
+        public InputAction @Exit_Hack_Cam => m_Wrapper.m_Player_Exit_Hack_Cam;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -814,6 +860,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Interact_HoldKey.started += instance.OnInteract_HoldKey;
             @Interact_HoldKey.performed += instance.OnInteract_HoldKey;
             @Interact_HoldKey.canceled += instance.OnInteract_HoldKey;
+            @Hack_Cam_View.started += instance.OnHack_Cam_View;
+            @Hack_Cam_View.performed += instance.OnHack_Cam_View;
+            @Hack_Cam_View.canceled += instance.OnHack_Cam_View;
+            @Exit_Hack_Cam.started += instance.OnExit_Hack_Cam;
+            @Exit_Hack_Cam.performed += instance.OnExit_Hack_Cam;
+            @Exit_Hack_Cam.canceled += instance.OnExit_Hack_Cam;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -827,6 +879,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Interact_HoldKey.started -= instance.OnInteract_HoldKey;
             @Interact_HoldKey.performed -= instance.OnInteract_HoldKey;
             @Interact_HoldKey.canceled -= instance.OnInteract_HoldKey;
+            @Hack_Cam_View.started -= instance.OnHack_Cam_View;
+            @Hack_Cam_View.performed -= instance.OnHack_Cam_View;
+            @Hack_Cam_View.canceled -= instance.OnHack_Cam_View;
+            @Exit_Hack_Cam.started -= instance.OnExit_Hack_Cam;
+            @Exit_Hack_Cam.performed -= instance.OnExit_Hack_Cam;
+            @Exit_Hack_Cam.canceled -= instance.OnExit_Hack_Cam;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1005,6 +1063,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnInteract_PressKey(InputAction.CallbackContext context);
         void OnInteract_HoldKey(InputAction.CallbackContext context);
+        void OnHack_Cam_View(InputAction.CallbackContext context);
+        void OnExit_Hack_Cam(InputAction.CallbackContext context);
     }
     public interface IDroneActions
     {

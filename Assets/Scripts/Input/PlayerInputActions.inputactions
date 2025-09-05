@@ -31,6 +31,24 @@
                     "processors": "",
                     "interactions": "Hold",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Hack_Cam_View",
+                    "type": "Button",
+                    "id": "b7c3cc66-acee-4e0f-b9c1-96f569b53893",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Exit_Hack_Cam",
+                    "type": "Button",
+                    "id": "072f78e2-d121-469e-8fdf-295f5c2c7bce",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -141,6 +159,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Interact_HoldKey",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a42d492d-d96d-443c-8e24-9d66135f18aa",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Hack_Cam_View",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7ea1e346-e298-438a-a2cd-f4dcfca47ca8",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Exit_Hack_Cam",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

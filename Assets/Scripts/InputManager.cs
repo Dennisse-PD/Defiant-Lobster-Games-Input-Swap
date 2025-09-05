@@ -29,6 +29,10 @@ public class InputManager : MonoBehaviour
     [SerializeField]
     private Forklift _forklift; //reference to forklift object
 
+    //Laptop
+    [SerializeField]
+    private Laptop _laptop; 
+
     
     // Start is called before the first frame update
     void Start()
@@ -48,7 +52,6 @@ public class InputManager : MonoBehaviour
         _input.Player.Interact_HoldKey.canceled += Interact_HoldKey_canceled;
 
         //Drone Tilt
-
         var tilt = _input.Drone.Tilt.ReadValue<Vector2>();
         _drone.CalculateTilt(tilt);
 
@@ -59,8 +62,6 @@ public class InputManager : MonoBehaviour
             _drone.CalculateMovementUpdate(rotInput);
         }
       
-        
-
         //Forklift Movement
         var forkliftMove = _input.Forklift.Move.ReadValue<Vector2>();//context variable is used to calculate based on input
         //forlift method here
@@ -73,9 +74,25 @@ public class InputManager : MonoBehaviour
             _forklift.LiftRoutine(liftInput);
         }
 
+        //Change Hack Cam View
+        _input.Player.Hack_Cam_View.performed += Hack_Cam_View_performed;
+        _input.Player.Exit_Hack_Cam.performed += Exit_Hack_Cam_performed;
+
     }
 
-    //----->Input Actions<-----
+    private void Exit_Hack_Cam_performed(InputAction.CallbackContext context)
+    {
+        _laptop.hackCancelled();
+    }
+
+    private void Hack_Cam_View_performed(InputAction.CallbackContext context)
+    {
+        Debug.Log("Changing cam view");
+        _laptop.isHacked();
+    }
+
+
+    //------------------->Player Interactables<---------------------------------
     private void Interact_HoldKey_canceled(InputAction.CallbackContext context)
     {
         if (_currentInteractable != null)
@@ -97,7 +114,7 @@ public class InputManager : MonoBehaviour
 
     //Interactable Action Events
     private void Interact_PressKey_performed(InputAction.CallbackContext context)
-    {
+    { 
         if (_currentInteractable != null) //checking that there is an active zone
         {
             Debug.Log("Press Key Action");
@@ -105,6 +122,8 @@ public class InputManager : MonoBehaviour
         }
 
     }
+    //---> END OF PLAYER INTERACTABLES---------------------------------------------
+
 
     // Update is called once per frame
     

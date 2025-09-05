@@ -31,9 +31,10 @@ namespace Game.Scripts.LiveObjects
 
         private void Update()
         {
+            /*all of this should in a public method called isHacked (all methods called from the input manager)
             if (_hacked == true)
             {
-                if (Input.GetKeyDown(KeyCode.E))
+                if (Input.GetKeyDown(KeyCode.E)) //UPGRADE
                 {
                     var previous = _activeCamera;
                     _activeCamera++;
@@ -46,15 +47,43 @@ namespace Game.Scripts.LiveObjects
                     _cameras[_activeCamera].Priority = 11;
                     _cameras[previous].Priority = 9;
                 }
-
-                if (Input.GetKeyDown(KeyCode.Escape))
+                 
+                // this can go in a public method called hackCancelled 
+                if (Input.GetKeyDown(KeyCode.Escape)) //UPGRADE f
                 {
                     _hacked = false;
                     onHackEnded?.Invoke();
                     ResetCameras();
                 }
+            }*/
+        }
+        public void isHacked()
+        {
+            if (_hacked == true)
+            {
+                    var previous = _activeCamera;
+                    _activeCamera++;
+
+
+                    if (_activeCamera >= _cameras.Length)
+                        _activeCamera = 0;
+
+
+                    _cameras[_activeCamera].Priority = 11;
+                    _cameras[previous].Priority = 9;
+                }
+            }    
+        public void hackCancelled()
+        {
+            if (_hacked == true) //to make sure esc key only works in the specific context 
+            {
+
+                _hacked = false;
+                onHackEnded?.Invoke();
+                ResetCameras();
             }
         }
+
 
         void ResetCameras()
         {
