@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.Scripts.UI;
+using UnityEngine.UIElements;
 
 
 namespace Game.Scripts.LiveObjects
@@ -77,6 +78,7 @@ namespace Game.Scripts.LiveObjects
 
         }
     
+        //The following method has been reworked so that it could properly work with the switch-case refactored code.
         private void OnTriggerEnter(Collider other)
         {
            
@@ -195,22 +197,7 @@ namespace Game.Scripts.LiveObjects
             }*/
         }
 
-        private void Interact_HoldKey_canceled(UnityEngine.InputSystem.InputAction.CallbackContext context)
-        {
-            KeyReleaseAction();
-        }
-
-        private void Interact_HoldKey_started(UnityEngine.InputSystem.InputAction.CallbackContext context)
-        {
-            KeyHoldAction();
-        }
-
-        private void Interact_PressKey_performed(UnityEngine.InputSystem.InputAction.CallbackContext context)
-        {
-            KeyPressAction();
-        }
-
-        //Switch Action Methods --> Called from the InputManager Script
+        //Newly added switch-case Action Methods --> Called from the InputManager Script
         public void KeyPressAction()
         {
             //Actions that require a single key press
@@ -256,9 +243,11 @@ namespace Game.Scripts.LiveObjects
             {
                 _inHoldState = false;
                 onHoldEnded?.Invoke(_zoneID);
+                
             }
 
         }
+        // Switch-case Action Methods Conclude 
       
         public void CollectItems()
         {

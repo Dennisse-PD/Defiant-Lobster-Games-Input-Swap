@@ -71,7 +71,7 @@ namespace Game.Scripts.Player
                 float h = move.x; // Horitzontal 
                 float v = move.y; // Vertical
 
-                transform.Rotate(transform.up, h);//If you want the character to rotate faster, you can add a multiplier
+                transform.Rotate(transform.up, h * 1.5f);//If you want the character to rotate faster, you can add a multiplier
 
                 var direction = transform.forward * v;
                 var velocity = direction * _speed;

@@ -22,7 +22,8 @@ namespace Game.Scripts.LiveObjects
 
         public static event Action onHackComplete;
         public static event Action onHackEnded;
-
+        [SerializeField]
+        private CinemachineVirtualCamera _laptopCam; //Will be active while hacking
         private void OnEnable()
         {
             InteractableZone.onHoldStarted += InteractableZone_onHoldStarted;
@@ -97,6 +98,7 @@ namespace Game.Scripts.LiveObjects
         {
             if (zoneID == 3 && _hacked == false) //Hacking terminal
             {
+                _laptopCam.Priority = 12;
                 _progressBar.gameObject.SetActive(true);
                 StartCoroutine(HackingRoutine());
                 onHackComplete?.Invoke();
@@ -108,8 +110,9 @@ namespace Game.Scripts.LiveObjects
             if (zoneID == 3) //Hacking terminal
             {
                 if (_hacked == true)
-                    return;
-
+                   
+                return;
+               
                 StopAllCoroutines();
                 _progressBar.gameObject.SetActive(false);
                 _progressBar.value = 0;
@@ -128,6 +131,7 @@ namespace Game.Scripts.LiveObjects
 
             //successfully hacked
             _hacked = true;
+            _laptopCam.Priority = 0;
             _interactableZone.CompleteTask(3);
 
             //hide progress bar
