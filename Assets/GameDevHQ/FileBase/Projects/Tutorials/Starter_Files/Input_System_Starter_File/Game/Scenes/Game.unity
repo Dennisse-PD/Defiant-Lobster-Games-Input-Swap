@@ -2099,6 +2099,9 @@ MonoBehaviour:
   - {fileID: 547960046}
   _crateCollider: {fileID: 147778362}
   _interactableZone: {fileID: 197238855}
+  _tapForce: 1
+  _maxHoldForce: 5
+  _holdChargeRate: 2
 --- !u!65 &147778362
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3030,7 +3033,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _zoneType: 1
   _zoneID: 6
-  _requiredID: -7
+  _requiredID: 5
   _displayMessage: Break the Crate
   _zoneItems: []
   _inventoryIcon: {fileID: 21300000, guid: 88841726d7ebbfc46bf799ee1bfb7d3f, type: 3}
@@ -17213,7 +17216,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 972744894}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.22150686, y: 0.0467052, z: -0.010621884, w: 0.9739818}
+  m_LocalRotation: {x: 0.22150686, y: 0.046706825, z: -0.0106222555, w: 0.97398174}
   m_LocalPosition: {x: -0.48177403, y: 4.5286655, z: -4.833789}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -24853,7 +24856,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _zoneType: 1
   _zoneID: 5
-  _requiredID: -4
+  _requiredID: 4
   _displayMessage: Drive Forklift
   _zoneItems: []
   _inventoryIcon: {fileID: 21300000, guid: 88841726d7ebbfc46bf799ee1bfb7d3f, type: 3}
@@ -32233,7 +32236,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: dd2a94e6375f34604b717d100c70532d, type: 3}
       propertyPath: m_Name
-      value: Breakable_Wooden_Crate
+      value: Crate
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: dd2a94e6375f34604b717d100c70532d, type: 3}
       propertyPath: m_IsActive
@@ -34183,7 +34186,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5234913521985193789, guid: d65c798ada92d4e81a896301d3a7aa8f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6422916411053558087, guid: d65c798ada92d4e81a896301d3a7aa8f, type: 3}
       propertyPath: m_RenderMode
@@ -38090,7 +38093,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _zoneType: 2
   _zoneID: 3
-  _requiredID: 1
+  _requiredID: 2
   _displayMessage: Hack Cameras
   _zoneItems: []
   _inventoryIcon: {fileID: 0}
@@ -38702,6 +38705,7 @@ MonoBehaviour:
   _drone: {fileID: 1073608670}
   _forklift: {fileID: 402105197}
   _laptop: {fileID: 816558616}
+  _crate: {fileID: 0}
 --- !u!136 &2071373265
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -31,9 +31,13 @@ public class InputManager : MonoBehaviour
 
     //Laptop
     [SerializeField]
-    private Laptop _laptop; 
+    private Laptop _laptop;
 
-    
+    //Crate
+    [SerializeField]
+    private Crate _crate;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -78,8 +82,54 @@ public class InputManager : MonoBehaviour
         _input.Player.Hack_Cam_View.performed += Hack_Cam_View_performed;
         _input.Player.Exit_Hack_Cam.performed += Exit_Hack_Cam_performed;
 
+        //Crate 
+        _input.Player.Punch.performed += Punch_performed;
+        _input.Player.Punch.started += Punch_started;
+        _input.Player.Punch.canceled += Punch_canceled;
+    }
+    //Crate Actions
+    private void Punch_canceled(InputAction.CallbackContext context)
+    {
+        if (_currentInteractable != null)
+        {
+            Debug.Log("Press Key Action");
+            _currentInteractable.KeyPressAction();
+
+            if (_currentInteractable.TryGetComponent(out Crate crate))
+            {
+                crate.TapBreak();
+            }
+        }
+    }  
+    private void Punch_started(InputAction.CallbackContext context)
+    {
+        if (_currentInteractable != null)
+        {
+            Debug.Log("Key Hold Started");
+            _currentInteractable.KeyHoldAction();
+
+            if (_currentInteractable.TryGetComponent(out Crate crate))
+            {
+                crate.StartHoldBreak();
+            }
+        }
+    }
+ 
+    private void Punch_performed(InputAction.CallbackContext context)
+    {
+        if (_currentInteractable != null)
+        {
+            Debug.Log("Press Key Action");
+            _currentInteractable.KeyPressAction();
+
+            if (_currentInteractable.TryGetComponent(out Crate crate))
+            {
+                crate.TapBreak();
+            }
+        }
     }
 
+    //Cam Hack Actions
     private void Exit_Hack_Cam_performed(InputAction.CallbackContext context)
     {
         _laptop.hackCancelled();

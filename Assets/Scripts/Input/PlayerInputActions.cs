@@ -71,6 +71,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Punch"",
+                    ""type"": ""Button"",
+                    ""id"": ""ff461bb3-8a46-40c8-9338-28fb8971496d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -203,6 +212,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Exit_Hack_Cam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8fc85b02-5610-439f-89e5-4b10aa872391"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Punch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -753,6 +773,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Interact_HoldKey = m_Player.FindAction("Interact_HoldKey", throwIfNotFound: true);
         m_Player_Hack_Cam_View = m_Player.FindAction("Hack_Cam_View", throwIfNotFound: true);
         m_Player_Exit_Hack_Cam = m_Player.FindAction("Exit_Hack_Cam", throwIfNotFound: true);
+        m_Player_Punch = m_Player.FindAction("Punch", throwIfNotFound: true);
         // Drone
         m_Drone = asset.FindActionMap("Drone", throwIfNotFound: true);
         m_Drone_Tilt = m_Drone.FindAction("Tilt", throwIfNotFound: true);
@@ -833,6 +854,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Interact_HoldKey;
     private readonly InputAction m_Player_Hack_Cam_View;
     private readonly InputAction m_Player_Exit_Hack_Cam;
+    private readonly InputAction m_Player_Punch;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -842,6 +864,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Interact_HoldKey => m_Wrapper.m_Player_Interact_HoldKey;
         public InputAction @Hack_Cam_View => m_Wrapper.m_Player_Hack_Cam_View;
         public InputAction @Exit_Hack_Cam => m_Wrapper.m_Player_Exit_Hack_Cam;
+        public InputAction @Punch => m_Wrapper.m_Player_Punch;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -866,6 +889,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Exit_Hack_Cam.started += instance.OnExit_Hack_Cam;
             @Exit_Hack_Cam.performed += instance.OnExit_Hack_Cam;
             @Exit_Hack_Cam.canceled += instance.OnExit_Hack_Cam;
+            @Punch.started += instance.OnPunch;
+            @Punch.performed += instance.OnPunch;
+            @Punch.canceled += instance.OnPunch;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -885,6 +911,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Exit_Hack_Cam.started -= instance.OnExit_Hack_Cam;
             @Exit_Hack_Cam.performed -= instance.OnExit_Hack_Cam;
             @Exit_Hack_Cam.canceled -= instance.OnExit_Hack_Cam;
+            @Punch.started -= instance.OnPunch;
+            @Punch.performed -= instance.OnPunch;
+            @Punch.canceled -= instance.OnPunch;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1065,6 +1094,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnInteract_HoldKey(InputAction.CallbackContext context);
         void OnHack_Cam_View(InputAction.CallbackContext context);
         void OnExit_Hack_Cam(InputAction.CallbackContext context);
+        void OnPunch(InputAction.CallbackContext context);
     }
     public interface IDroneActions
     {

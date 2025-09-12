@@ -12,6 +12,14 @@ namespace Game.Scripts.LiveObjects
         [SerializeField] private BoxCollider _crateCollider;
         [SerializeField] private InteractableZone _interactableZone;
         private bool _isReadyToBreak = false;
+        //Force variables for varying in
+        [SerializeField] private float _tapForce = 1f; // normal press force
+        [SerializeField] private float _maxHoldForce = 5f; // maximum force when held
+        [SerializeField] private float _holdChargeRate = 2f; // how fast force increases while holding
+        private float _currentHoldForce;
+        private bool _isHolding;
+
+
 
         private List<Rigidbody> _brakeOff = new List<Rigidbody>();
 
@@ -34,7 +42,7 @@ namespace Game.Scripts.LiveObjects
             {
                 if (_brakeOff.Count > 0)
                 {
-                    BreakPart();
+                    BreakPart(_tapForce);//default to tap force if zone completes without hold
                     StartCoroutine(PunchDelay());
                 }
                 else if(_brakeOff.Count == 0)
@@ -53,14 +61,49 @@ namespace Game.Scripts.LiveObjects
             
         }
 
-
-
-        public void BreakPart()
+        private void Update()//added to actively add force when the codition is met
         {
+            // Charges up while holding
+            if (_isHolding)
+            {
+                _currentHoldForce += _holdChargeRate * Time.deltaTime;
+                //current force will always be determined by the following values
+                _currentHoldForce = Mathf.Clamp(_currentHoldForce, _tapForce, _maxHoldForce);
+            }
+        }
+
+        public void BreakPart(float forceMult) //parameter added to control how much force is added
+        {
+            //if (_brakeOff.Count == 0) return; will chekc its usefulness first 
             int rng = Random.Range(0, _brakeOff.Count);
             _brakeOff[rng].constraints = RigidbodyConstraints.None;
-            _brakeOff[rng].AddForce(new Vector3(1f, 1f, 1f), ForceMode.Force);
+            _brakeOff[rng].AddForce(new Vector3(1f, 1f, 1f) * forceMult, ForceMode.Force);
             _brakeOff.Remove(_brakeOff[rng]);            
+        }
+        // Tap
+        public void TapBreak() 
+        {
+            if (_isReadyToBreak)
+                BreakPart(_tapForce);
+        }
+
+        // Called when hold starts
+        public void StartHoldBreak()
+        {
+            _isHolding = true;
+            _currentHoldForce = _tapForce; // start from default force
+        }
+        // Called when hold is released
+        public void ReleaseHoldBreak()
+        {
+            if (_isHolding && _isReadyToBreak)
+            {
+                BreakPart(_currentHoldForce);
+                Debug.Log($"Hold Released with force {_currentHoldForce}");
+            }
+
+            _isHolding = false;
+            _currentHoldForce = 0f;
         }
 
         IEnumerator PunchDelay()
