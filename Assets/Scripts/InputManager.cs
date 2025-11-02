@@ -2,6 +2,7 @@ using Game.Scripts.LiveObjects;
 using Game.Scripts.Player;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,7 +12,9 @@ public class InputManager : MonoBehaviour
 
     //Player
     [SerializeField]
-    private Player _player; 
+    private Player _player;
+    [SerializeField]
+    private GameObject _playerObj;
 
     //Input Actions
     private PlayerInputActions _input;
@@ -38,22 +41,60 @@ public class InputManager : MonoBehaviour
     private Crate _crate;
 
 
+
     // Start is called before the first frame update
     void Start()
     {
         InitializePlayerInput();
-      
+
+        //Subscribe once here
+        //Interactables(Player interactions)
+        _input.Player.Interact_PressKey.performed += Interact_PressKey_performed;
+        _input.Player.Interact_HoldKey.started += Interact_HoldKey_started;
+        _input.Player.Interact_HoldKey.canceled += Interact_HoldKey_canceled;
+
+        //Crate Punches 
+
+        _input.Player.Punch_Tap.performed += Punch_Tap_performed;//tap
+        _input.Player.Power_Punch.started += Power_Punch_started;// hold 
+        _input.Player.Power_Punch.canceled += Power_Punch_canceled; //release 
+
+        //Change Hack Cam View
+        _input.Player.Hack_Cam_View.performed += Hack_Cam_View_performed;
+        _input.Player.Exit_Hack_Cam.performed += Exit_Hack_Cam_performed;
+
+
     }
+    //Crate Punching Callback Methods 
+    private void Power_Punch_canceled(InputAction.CallbackContext context)
+    {
+
+        //Will break more pieces and with more force when punch is released 
+        if (_crate != null)
+            //_crate.StopBreakingHold();
+            _crate.BreakPart(0f, 0);
+    }
+
+    private void Power_Punch_started(InputAction.CallbackContext context)
+    {
+        //Will break more pieces and with more force when punch is registred 
+        if (_crate != null)
+            _crate.BreakPart(10f, 10);
+    }
+
+    private void Punch_Tap_performed(InputAction.CallbackContext context)
+    {
+        // Will break less pieces with elss forec when tapped
+           _crate.BreakPart(0.5f, 1);
+    }
+
     void Update()
     {
         //Player Movement
         var move = _input.Player.Move.ReadValue<Vector2>(); //Using the context value from our vector2 input, we can register direction
         _player.CalcutateMovement(move); //uses the parameter variable which is of type vector 2
 
-        //Interactables(Player interactions)
-        _input.Player.Interact_PressKey.performed += Interact_PressKey_performed;
-        _input.Player.Interact_HoldKey.started += Interact_HoldKey_started;
-        _input.Player.Interact_HoldKey.canceled += Interact_HoldKey_canceled;
+       
 
         //Drone Tilt
         var tilt = _input.Drone.Tilt.ReadValue<Vector2>();
@@ -65,7 +106,7 @@ public class InputManager : MonoBehaviour
         {
             _drone.CalculateMovementUpdate(rotInput);
         }
-      
+
         //Forklift Movement
         var forkliftMove = _input.Forklift.Move.ReadValue<Vector2>();//context variable is used to calculate based on input
         //forlift method here
@@ -78,55 +119,27 @@ public class InputManager : MonoBehaviour
             _forklift.LiftRoutine(liftInput);
         }
 
-        //Change Hack Cam View
-        _input.Player.Hack_Cam_View.performed += Hack_Cam_View_performed;
-        _input.Player.Exit_Hack_Cam.performed += Exit_Hack_Cam_performed;
+        
 
-        //Crate 
-        _input.Player.Punch.performed += Punch_performed;
-        _input.Player.Punch.started += Punch_started;
-        _input.Player.Punch.canceled += Punch_canceled;
     }
-    //Crate Actions
-    private void Punch_canceled(InputAction.CallbackContext context)
-    {
-        if (_currentInteractable != null)
-        {
-            Debug.Log("Press Key Action");
-            _currentInteractable.KeyPressAction();
+    // Unsubscribe, avoids errors when objects related to callbacks are destroyed 
+    private void OnDisable()
+{
 
-            if (_currentInteractable.TryGetComponent(out Crate crate))
-            {
-                crate.TapBreak();
-            }
-        }
-    }  
-    private void Punch_started(InputAction.CallbackContext context)
-    {
-        if (_currentInteractable != null)
-        {
-            Debug.Log("Key Hold Started");
-            _currentInteractable.KeyHoldAction();
+        // Punch
+        _input.Player.Punch_Tap.performed -= Punch_Tap_performed;
+        _input.Player.Power_Punch.started -= Power_Punch_started;
+        _input.Player.Power_Punch.canceled -= Power_Punch_canceled;
 
-            if (_currentInteractable.TryGetComponent(out Crate crate))
-            {
-                crate.StartHoldBreak();
-            }
-        }
-    }
- 
-    private void Punch_performed(InputAction.CallbackContext context)
-    {
-        if (_currentInteractable != null)
-        {
-            Debug.Log("Press Key Action");
-            _currentInteractable.KeyPressAction();
+        // Interact
+        _input.Player.Interact_PressKey.performed -= Interact_PressKey_performed;
+        _input.Player.Interact_HoldKey.started -= Interact_HoldKey_started;
+        _input.Player.Interact_HoldKey.canceled -= Interact_HoldKey_canceled;
 
-            if (_currentInteractable.TryGetComponent(out Crate crate))
-            {
-                crate.TapBreak();
-            }
-        }
+        // Hack Cam
+        _input.Player.Hack_Cam_View.performed -= Hack_Cam_View_performed;
+        _input.Player.Exit_Hack_Cam.performed -= Exit_Hack_Cam_performed;
+
     }
 
     //Cam Hack Actions
@@ -137,7 +150,7 @@ public class InputManager : MonoBehaviour
 
     private void Hack_Cam_View_performed(InputAction.CallbackContext context)
     {
-        Debug.Log("Changing cam view");
+       
         _laptop.isHacked();
     }
 
@@ -147,7 +160,7 @@ public class InputManager : MonoBehaviour
     {
         if (_currentInteractable != null)
         {
-            Debug.Log("Canceled Key Hold");
+         
             _currentInteractable.KeyReleaseAction();
         }
     }
@@ -156,7 +169,7 @@ public class InputManager : MonoBehaviour
     {
         if (_currentInteractable != null)
         {
-            Debug.Log("Key Hold Started");
+            
             _currentInteractable.KeyHoldAction();
         }
     }
@@ -167,7 +180,7 @@ public class InputManager : MonoBehaviour
     { 
         if (_currentInteractable != null) //checking that there is an active zone
         {
-            Debug.Log("Press Key Action");
+           
             _currentInteractable.KeyPressAction();
         }
 
@@ -197,6 +210,8 @@ public class InputManager : MonoBehaviour
     {
         //This method is called from within the Drone Script when flight is enabled
         _input.Player.Disable(); //Player controls won't be accesssible during this
+        //disable player so that the drone is not prevented from taking flight due to colliding under the player
+        _playerObj.SetActive(false);
         _input.Drone.Enable();
         _input.Drone.Exit.performed += Exit_performed;//Placed in the Initialize method because we are only subcribing to this once(when drone is active)
     }
@@ -216,7 +231,7 @@ public class InputManager : MonoBehaviour
     //Exit Forklift
     private void ExitVehicle_performed(InputAction.CallbackContext context)
     {
-        Debug.Log("Exit Forklift!");
+       // Debug.Log("Exit Forklift!");
         DisableForkliftControls();
         _forklift.ExitDriveMode();
         
@@ -225,7 +240,7 @@ public class InputManager : MonoBehaviour
     //Exit Drone
     private void Exit_performed(InputAction.CallbackContext context)
     {
-        Debug.Log("Exit Drone!");
+       // Debug.Log("Exit Drone!");
         _drone.ExitFlightMode();
     
     }
@@ -234,6 +249,7 @@ public class InputManager : MonoBehaviour
     {
         //This method is called from within the Drone Srcipt when flight is disabled
         _input.Drone.Disable();
+        _playerObj.SetActive(true);
         _input.Player.Enable();  //Return control to the Player
        
     }
@@ -249,7 +265,9 @@ public class InputManager : MonoBehaviour
     {
         _currentInteractable = zone;
     }
- 
-    
+  
+
+   
+
 
 }

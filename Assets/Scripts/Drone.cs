@@ -1,11 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using Game.Scripts.UI;
-using UnityEditor.Experimental.GraphView;
-using System.CodeDom.Compiler;
 
 namespace Game.Scripts.LiveObjects
 {
@@ -67,12 +63,15 @@ namespace Game.Scripts.LiveObjects
             //Need to make it so the drone stops moving for good, no animations or anything
             if (_inFlightMode == true) //added from the update
             {
+                _rigidbody.velocity = Vector3.zero;
+                _rigidbody.angularVelocity = Vector3.zero;
+                this.transform.position = startPos; //Return drone to start position 
                 _inputManager.DisableDroneControls();//disable drone controls
                 _droneCam.Priority = 9;
                 _inFlightMode = false;
                 onExitFlightmode?.Invoke(); //Added from the update
                 UIManager.Instance.DroneView(false);
-                this.transform.position = startPos; //Return drone to start position
+               
 
             }
 
@@ -101,8 +100,8 @@ namespace Game.Scripts.LiveObjects
         }
         private void FixedUpdate() 
         {
-            
-           _rigidbody.AddForce(transform.up * (9.81f), ForceMode.Acceleration); //Seems to be adding gravity to ground the object
+            if (_inFlightMode) //so that it won't add upward force indefinetly 
+                _rigidbody.AddForce(transform.up * (9.81f), ForceMode.Acceleration); //Seems to be adding gravity to ground the object
              //CalculateMovementFixedUpdate(); --> Moved to InputManager Script
         }
 

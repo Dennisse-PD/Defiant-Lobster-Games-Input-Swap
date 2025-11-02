@@ -12,14 +12,8 @@ namespace Game.Scripts.LiveObjects
         [SerializeField] private BoxCollider _crateCollider;
         [SerializeField] private InteractableZone _interactableZone;
         private bool _isReadyToBreak = false;
-        //Force variables for varying in
-        [SerializeField] private float _tapForce = 1f; // normal press force
-        [SerializeField] private float _maxHoldForce = 5f; // maximum force when held
-        [SerializeField] private float _holdChargeRate = 2f; // how fast force increases while holding
-        private float _currentHoldForce;
-        private bool _isHolding;
-
-
+        //Added to validate in Break function 
+        private bool _isSet;
 
         private List<Rigidbody> _brakeOff = new List<Rigidbody>();
 
@@ -29,9 +23,9 @@ namespace Game.Scripts.LiveObjects
         }
 
         private void InteractableZone_onZoneInteractionComplete(InteractableZone zone)
-        {
-            
-            if (_isReadyToBreak == false && _brakeOff.Count >0)
+        { 
+            //I need the conditions in this to validate for the input manager, if not it happens outside of the zone
+            if (_isReadyToBreak == false && _brakeOff.Count > 0)
             {
                 _wholeCrate.SetActive(false);
                 _brokenCrate.SetActive(true);
@@ -42,15 +36,17 @@ namespace Game.Scripts.LiveObjects
             {
                 if (_brakeOff.Count > 0)
                 {
-                    BreakPart(_tapForce);//default to tap force if zone completes without hold
+                    _isSet = true; //added to validate directly in break function
+                    BreakPart(1f);
                     StartCoroutine(PunchDelay());
+                    //we could start a routine for the hold break here if neccessary 
                 }
-                else if(_brakeOff.Count == 0)
+                else if (_brakeOff.Count == 0)
                 {
                     _isReadyToBreak = false;
                     _crateCollider.enabled = false;
                     _interactableZone.CompleteTask(6);
-                    Debug.Log("Completely Busted");
+                    Debug.Log("Completely Busted");//is this the one causing the issue?
                 }
             }
         }
@@ -58,55 +54,30 @@ namespace Game.Scripts.LiveObjects
         private void Start()
         {
             _brakeOff.AddRange(_pieces);
-            
+
         }
 
-        private void Update()//added to actively add force when the codition is met
+        public void BreakPart(float forceMult, int piecesToBreak = 1)
         {
-            // Charges up while holding
-            if (_isHolding)
+            if (_isSet != true) return;
+
+            // clamp to available pieces
+            int breakCount = Mathf.Min(piecesToBreak, _brakeOff.Count);
+
+            for (int i = 0; i < breakCount; i++)
             {
-                _currentHoldForce += _holdChargeRate * Time.deltaTime;
-                //current force will always be determined by the following values
-                _currentHoldForce = Mathf.Clamp(_currentHoldForce, _tapForce, _maxHoldForce);
+                if (_brakeOff.Count == 0) break;
+
+                int rng = Random.Range(0, _brakeOff.Count);
+                Rigidbody piece = _brakeOff[rng];
+
+                piece.constraints = RigidbodyConstraints.None;
+                piece.AddForce(Random.insideUnitSphere * forceMult, ForceMode.Impulse);
+
+                _brakeOff.RemoveAt(rng);
             }
         }
-
-        public void BreakPart(float forceMult) //parameter added to control how much force is added
-        {
-            //if (_brakeOff.Count == 0) return; will chekc its usefulness first 
-            int rng = Random.Range(0, _brakeOff.Count);
-            _brakeOff[rng].constraints = RigidbodyConstraints.None;
-            _brakeOff[rng].AddForce(new Vector3(1f, 1f, 1f) * forceMult, ForceMode.Force);
-            _brakeOff.Remove(_brakeOff[rng]);            
-        }
-        // Tap
-        public void TapBreak() 
-        {
-            if (_isReadyToBreak)
-                BreakPart(_tapForce);
-        }
-
-        // Called when hold starts
-        public void StartHoldBreak()
-        {
-            _isHolding = true;
-            _currentHoldForce = _tapForce; // start from default force
-        }
-        // Called when hold is released
-        public void ReleaseHoldBreak()
-        {
-            if (_isHolding && _isReadyToBreak)
-            {
-                BreakPart(_currentHoldForce);
-                Debug.Log($"Hold Released with force {_currentHoldForce}");
-            }
-
-            _isHolding = false;
-            _currentHoldForce = 0f;
-        }
-
-        IEnumerator PunchDelay()
+            IEnumerator PunchDelay()
         {
             float delayTimer = 0;
             while (delayTimer < _punchDelay)
@@ -117,7 +88,8 @@ namespace Game.Scripts.LiveObjects
 
             _interactableZone.ResetAction(6);
         }
-
+        
+      
         private void OnDisable()
         {
             InteractableZone.onZoneInteractionComplete -= InteractableZone_onZoneInteractionComplete;

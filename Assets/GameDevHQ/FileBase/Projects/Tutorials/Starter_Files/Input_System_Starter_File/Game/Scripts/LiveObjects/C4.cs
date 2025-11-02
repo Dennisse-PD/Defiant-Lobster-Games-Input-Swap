@@ -13,6 +13,7 @@ namespace Game.Scripts.LiveObjects
 
         public void Explode()
         {
+            if(_explosionPrefab != null)
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
 
 

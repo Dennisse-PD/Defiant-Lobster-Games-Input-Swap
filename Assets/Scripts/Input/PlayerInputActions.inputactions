@@ -51,9 +51,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Punch",
+                    "name": "Power_Punch",
                     "type": "Button",
                     "id": "ff461bb3-8a46-40c8-9338-28fb8971496d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(pressPoint=2)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Punch_Tap",
+                    "type": "Button",
+                    "id": "90577af4-8794-4d4e-8a2e-0ae3cfaf702f",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -197,10 +206,21 @@
                     "name": "",
                     "id": "8fc85b02-5610-439f-89e5-4b10aa872391",
                     "path": "<Keyboard>/e",
-                    "interactions": "Hold",
+                    "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Punch",
+                    "action": "Power_Punch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9ca83ef7-9928-4ce3-8031-8ef7ac13c5a6",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Punch_Tap",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

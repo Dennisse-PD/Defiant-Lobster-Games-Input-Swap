@@ -83,20 +83,20 @@ namespace Game.Scripts.LiveObjects
         private void OnTriggerEnter(Collider other)
         {
            
-            Debug.Log($"OnTriggerEnter: player entered zone {_zoneID} | currentID: {_currentZoneID}, requiredID: {_requiredID}, zoneType: {_zoneType}");
+            
 
     if (other.CompareTag("Player") && _currentZoneID > _requiredID)
     {
                 InputManager inputManager = FindObjectOfType<InputManager>();//finding specific obj with class
                 if (inputManager != null)//Best practice check
                     inputManager.SetCurrentInteractableZone(this); // identify self
-                Debug.Log("Passed the zone requirement check");          
+                       
                 switch (_zoneType)
                 {
                     case ZoneType.Collectable:
                         if (_itemsCollected == false)
                         {
-                            Debug.Log("  Zonetype working!");
+                            
                             _inZone = true;
                             if (_displayMessage != null)
                             {
@@ -113,7 +113,7 @@ namespace Game.Scripts.LiveObjects
                         if (_actionPerformed == false)
                         {
 
-                            Debug.Log("Action Zonetype working!");
+                            
                             _inZone = true;
                             
                             if (_displayMessage != null)
@@ -202,7 +202,7 @@ namespace Game.Scripts.LiveObjects
         public void KeyPressAction()
         {
             //Actions that require a single key press
-            Debug.Log("Key Press Method");
+           
             if (_inZone  == true)
 
             switch (_zoneType)

@@ -34,7 +34,7 @@ namespace Game.Scripts.LiveObjects
 
         private void EnterDriveMode(InteractableZone zone)
         {
-            Debug.Log("Drive mode is active");
+          
             if (_inDriveMode !=true && zone.GetZoneID() == 5) //Enter ForkLift
             {
                 _inDriveMode = true;

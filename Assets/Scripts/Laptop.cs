@@ -62,24 +62,27 @@ namespace Game.Scripts.LiveObjects
         {
             if (_hacked == true)
             {
-                    var previous = _activeCamera;
-                    _activeCamera++;
+                var previous = _activeCamera;
+                _activeCamera++;
 
 
-                    if (_activeCamera >= _cameras.Length)
-                        _activeCamera = 0;
+                if (_activeCamera >= _cameras.Length)
+                    _activeCamera = 0;
 
 
-                    _cameras[_activeCamera].Priority = 11;
-                    _cameras[previous].Priority = 9;
-                }
-            }    
+                _cameras[_activeCamera].Priority = 11;
+                _cameras[previous].Priority = 9;
+            }
+
+           
+        }    
         public void hackCancelled()
         {
             if (_hacked == true) //to make sure esc key only works in the specific context 
             {
 
                 _hacked = false;
+                _laptopCam.Priority = 0;
                 onHackEnded?.Invoke();
                 ResetCameras();
             }
@@ -109,10 +112,11 @@ namespace Game.Scripts.LiveObjects
         {
             if (zoneID == 3) //Hacking terminal
             {
+
                 if (_hacked == true)
-                   
+                 
                 return;
-               
+                _laptopCam.Priority = 9;
                 StopAllCoroutines();
                 _progressBar.gameObject.SetActive(false);
                 _progressBar.value = 0;
