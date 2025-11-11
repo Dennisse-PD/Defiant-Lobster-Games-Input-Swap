@@ -43,12 +43,18 @@ namespace Game.Scripts.LiveObjects
                 }
                 else if (_brakeOff.Count == 0)
                 {
-                    _isReadyToBreak = false;
-                    _crateCollider.enabled = false;
-                    _interactableZone.CompleteTask(6);
-                    Debug.Log("Completely Busted");//is this the one causing the issue?
+                    Debug.Log("Count should be 0");
+;                    crateBroken();
                 }
             }
+        }
+        private void crateBroken()
+        {
+
+            _isReadyToBreak = false;
+            _crateCollider.enabled = false;
+            _interactableZone.CompleteTask(6);
+            Debug.Log("Completely Busted");
         }
 
         private void Start()

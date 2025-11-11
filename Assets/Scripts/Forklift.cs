@@ -37,6 +37,7 @@ namespace Game.Scripts.LiveObjects
           
             if (_inDriveMode !=true && zone.GetZoneID() == 5) //Enter ForkLift
             {
+                Debug.Log("Drive mode entered");
                 _inDriveMode = true;
                 _forkliftCam.Priority = 11;
                 onDriveModeEntered?.Invoke();
@@ -58,13 +59,13 @@ namespace Game.Scripts.LiveObjects
 
         private void Update()
         {
-            if (_inDriveMode == true)//validation not needed since the Action Map being active already tells us this is true
-            {
+            //if (_inDriveMode == true)//validation not needed since the Action Map being active already tells us this is true
+            //{
                 //LiftControls();
              //   CalcutateMovement();
               // if (Input.GetKeyDown(KeyCode.Escape))//UPGRADE
                 // ExitDriveMode();
-            }
+          //  }
 
         }
 

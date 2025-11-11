@@ -56,8 +56,8 @@ public class InputManager : MonoBehaviour
         //Crate Punches 
 
         _input.Player.Punch_Tap.performed += Punch_Tap_performed;//tap
-        _input.Player.Power_Punch.started += Power_Punch_started;// hold 
-        _input.Player.Power_Punch.canceled += Power_Punch_canceled; //release 
+        _input.Player.Power_Punch.performed += Power_Punch_performed;
+
 
         //Change Hack Cam View
         _input.Player.Hack_Cam_View.performed += Hack_Cam_View_performed;
@@ -65,27 +65,21 @@ public class InputManager : MonoBehaviour
 
 
     }
-    //Crate Punching Callback Methods 
-    private void Power_Punch_canceled(InputAction.CallbackContext context)
-    {
 
-        //Will break more pieces and with more force when punch is released 
-        if (_crate != null)
-            //_crate.StopBreakingHold();
-            _crate.BreakPart(0f, 0);
-    }
-
-    private void Power_Punch_started(InputAction.CallbackContext context)
+    private void Power_Punch_performed(InputAction.CallbackContext context)
     {
         //Will break more pieces and with more force when punch is registred 
         if (_crate != null)
-            _crate.BreakPart(10f, 10);
+            
+        _crate.BreakPart(10f, 10);
     }
 
     private void Punch_Tap_performed(InputAction.CallbackContext context)
     {
+        if(_crate != null)
+           
         // Will break less pieces with elss forec when tapped
-           _crate.BreakPart(0.5f, 1);
+        _crate.BreakPart(0.1f, 1);
     }
 
     void Update()
@@ -128,8 +122,8 @@ public class InputManager : MonoBehaviour
 
         // Punch
         _input.Player.Punch_Tap.performed -= Punch_Tap_performed;
-        _input.Player.Power_Punch.started -= Power_Punch_started;
-        _input.Player.Power_Punch.canceled -= Power_Punch_canceled;
+        //_input.Player.Power_Punch.started -= Power_Punch_started;
+       // _input.Player.Power_Punch.canceled -= Power_Punch_canceled;
 
         // Interact
         _input.Player.Interact_PressKey.performed -= Interact_PressKey_performed;
